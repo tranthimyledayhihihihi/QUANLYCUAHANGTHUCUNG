@@ -1,12 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace QUANLYCUAHANGTHUCUNG.Class
+namespace QuanLyThuCung.Class
 {
-    internal class DoiMatKhau
+    public class DoiMatKhau
     {
+        public bool LuuMatKhauMoi(string maNV, string matKhauMoi)
+        {
+            List<NhanVien> listNV = FileXml.DocFile<NhanVien>("NhanVien.xml");
+
+            var nv = listNV.FirstOrDefault(x => x.MaNhanVien == maNV);
+            if (nv != null)
+            {
+                nv.MatKhau = matKhauMoi;
+                // Ghi đè lại file XML
+                FileXml.GhiFile("NhanVien.xml", listNV);
+                return true;
+            }
+            return false;
+        }
     }
 }

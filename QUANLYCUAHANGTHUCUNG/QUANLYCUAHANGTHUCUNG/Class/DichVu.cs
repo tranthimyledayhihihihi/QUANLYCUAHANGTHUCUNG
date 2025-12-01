@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace QUANLYCUAHANGTHUCUNG.Class
+﻿namespace QuanLyThuCung.Class
 {
-    internal class DichVu
+    public class DichVu
     {
+        public string MaDV { get; set; }
+        public string TenDV { get; set; }
+        public int GiaDV { get; set; }
+
+        // Dòng này đã được sửa để có public setter
+        public int ThoiGianThucHien { get; set; }
     }
 }

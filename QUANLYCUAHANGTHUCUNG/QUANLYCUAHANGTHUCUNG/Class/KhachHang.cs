@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace QUANLYCUAHANGTHUCUNG.Class
+﻿namespace QuanLyThuCung.Class
 {
-    internal class KhachHang
+    public class KhachHang
     {
+        public string MaKhachHang { get; set; }
+        public string TenKhachHang { get; set; }
+        public string SDT { get; set; }
+        public string DiaChi { get; set; }
+        public int DiemTichLuy { get; set; } = 0;
     }
 }

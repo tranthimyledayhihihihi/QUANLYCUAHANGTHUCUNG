@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace QUANLYCUAHANGTHUCUNG.Class
+﻿namespace QuanLyThuCung.Class
 {
-    internal class HeThong
+    public class HeThong
     {
+        // Biến static để lưu nhân viên đang đăng nhập, truy cập từ mọi Form
+        public static NhanVien NhanVienDangNhap { get; set; } = null;
     }
 }

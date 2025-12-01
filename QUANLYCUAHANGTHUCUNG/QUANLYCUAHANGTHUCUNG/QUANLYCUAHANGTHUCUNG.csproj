@@ -35,6 +35,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.DataVisualization" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -58,7 +60,6 @@
     <Compile Include="Class\NhanVien.cs" />
     <Compile Include="Class\PhieuNhap.cs" />
     <Compile Include="Class\SanPham.cs" />
-    <Compile Include="Class\SQLHelper.cs" />
     <Compile Include="Class\ThuCung.cs" />
     <Compile Include="GUI\frmBanHang.cs">
       <SubType>Form</SubType>
@@ -138,8 +139,15 @@
     <Compile Include="GUI\frmQuanLyThuCung.Designer.cs">
       <DependentUpon>frmQuanLyThuCung.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\NhaCungCap.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="GUI\frmBanHang.resx">
+      <DependentUpon>frmBanHang.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmBaoCao.resx">
+      <DependentUpon>frmBaoCao.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

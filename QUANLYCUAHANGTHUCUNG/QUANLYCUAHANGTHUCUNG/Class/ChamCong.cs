@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace QUANLYCUAHANGTHUCUNG.Class
+namespace QuanLyThuCung.Class
 {
-    internal class ChamCong
+    public class ChamCong
     {
+        public int Id { get; set; }
+        public string MaNhanVien { get; set; }
+        public DateTime Ngay { get; set; }
+        public string TrangThai { get; set; } // VD: Có mặt, Vắng, Đi trễ
     }
 }

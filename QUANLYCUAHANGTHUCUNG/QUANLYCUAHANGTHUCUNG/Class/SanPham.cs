@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace QUANLYCUAHANGTHUCUNG.Class
+﻿namespace QuanLyThuCung.Class
 {
-    internal class SanPham
+    public class SanPham
     {
+        public string MaSP { get; set; }
+        public string TenSP { get; set; }
+        public int DonGia { get; set; }
+        public int SoLuongTon { get; set; }
+        public string LoaiSP { get; internal set; }
+        public string DonViTinh { get; internal set; }
+        public string MaNCC { get; internal set; }
     }
 }

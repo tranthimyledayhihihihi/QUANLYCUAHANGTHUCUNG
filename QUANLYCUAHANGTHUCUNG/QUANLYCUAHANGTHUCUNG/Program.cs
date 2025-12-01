@@ -1,22 +1,26 @@
-﻿using System;
+﻿using QuanLyCuaHangThuCung.GUI;
+using QuanLyThuCung.Class; // Nhớ đảm bảo namespace này đúng với project của bạn
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace QUANLYCUAHANGTHUCUNG
+namespace QuanLyThuCung
 {
-    internal static class Program
+    static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
+        public static object HeThong { get; internal set; }
+        public static object MaNhanVienHienTai { get; internal set; }
+
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            // TaoDuLieuMau();  <-- Comment dòng này lại (thêm // ở đầu)
+
+            // Mở dòng này ra để chạy Form Đăng Nhập
+            Application.Run(new frmDangNhap());
         }
     }
 }
