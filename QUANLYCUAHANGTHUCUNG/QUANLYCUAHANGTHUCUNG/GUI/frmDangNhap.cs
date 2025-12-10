@@ -1,64 +1,64 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq; // Dùng LINQ để tìm tài khoản
+﻿using QuanLyCuaHangThuCung.Class;
+using System;
 using System.Windows.Forms;
-using QuanLyThuCung.Class; // Namespace chứa FileXml và Models
 
 namespace QuanLyCuaHangThuCung.GUI
 {
     public partial class frmDangNhap : Form
     {
+        DangNhap dn = new DangNhap(); // class xử lý XML
+
         public frmDangNhap()
         {
             InitializeComponent();
         }
 
+        private void frmDangNhap_Load(object sender, EventArgs e)
+        {
+            txtUser.Focus();
+        }
+
+        // Nút Đăng nhập
         private void btnDangNhap_Click(object sender, EventArgs e)
         {
-            string u = txtUser.Text.Trim();
-            string p = txtPass.Text.Trim();
+            string user = txtUser.Text.Trim();
+            string pass = txtPass.Text.Trim();
 
-            if (u == "" || p == "")
+            // Kiểm tra trống
+            if (user == "" || pass == "")
             {
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin!");
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            try
+            // Kiểm tra trong XML
+            bool kq = dn.kiemtraDangNhap(user, pass);
+
+            if (!kq)
             {
-                // 1. Đọc danh sách nhân viên từ file XML
-                List<NhanVien> listNV = FileXml.DocFile<NhanVien>("NhanVien.xml");
-
-                // 2. Tìm nhân viên có Mã và Mật khẩu trùng khớp
-                // (Sử dụng LINQ thay cho câu lệnh SELECT của SQL)
-                var taiKhoan = listNV.FirstOrDefault(x => x.MaNhanVien == u && x.MatKhau == p);
-
-                if (taiKhoan != null)
-                {
-                    // 3. Đăng nhập thành công
-                    MessageBox.Show("Đăng nhập thành công! Xin chào " + taiKhoan.TenNhanVien, "Thông báo");
-
-                    // QUAN TRỌNG: Gán toàn bộ đối tượng tìm được vào Hệ Thống
-                    // (Lệnh này sửa lỗi NullReferenceException của bạn)
-                    HeThong.NhanVienDangNhap = taiKhoan;
-
-                    // 4. Mở Form Chính (frmMain)
-                    this.Hide();
-                    frmMain f = new frmMain();
-                    f.ShowDialog();
-
-                    // Khi Form Main đóng thì đóng luôn ứng dụng
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Sai tên đăng nhập hoặc mật khẩu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("Sai mã nhân viên hoặc mật khẩu!", "Lỗi đăng nhập",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtPass.Clear();
+                txtPass.Focus();
+                return;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi hệ thống: " + ex.Message);
-            }
+
+            // Lấy thông tin từ XML
+            var info = dn.layThongTinNguoiDung(user);
+
+            // 💥 Không dùng Session nữa — dùng biến static của frmMainNew
+            frmMainNew.maNVMain = info.MaNhanVien;
+            frmMainNew.QuyenMain = info.Quyen;
+
+            MessageBox.Show("Đăng nhập thành công!", "Thông báo",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // Mở form chính
+            frmMainNew main = new frmMainNew();
+            main.Show();
+
+            this.Hide(); // ẩn form đăng nhập
         }
 
         private void btnThoat_Click(object sender, EventArgs e)
@@ -66,12 +66,14 @@ namespace QuanLyCuaHangThuCung.GUI
             Application.Exit();
         }
 
-        private void txtPass_KeyDown(object sender, KeyEventArgs e)
+        private void pnlHeader_Paint(object sender, PaintEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-            {
-                btnDangNhap_Click(sender, e);
-            }
+
+        }
+
+        private void pnlBody_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

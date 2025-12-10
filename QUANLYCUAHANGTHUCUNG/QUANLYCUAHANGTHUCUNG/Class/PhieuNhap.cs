@@ -1,29 +1,66 @@
-﻿using System;
+﻿using System.Data;
+using System.Linq;
 
-namespace QuanLyThuCung.Class
+namespace QuanLyCuaHangThuCung.Class
 {
-    public class PhieuNhap
+    class PhieuNhap
     {
-        // Khớp với bảng PhieuNhap trong SQL
-        public int MaPhieu { get; set; } // Tự tăng trong logic xử lý
-        public string MaMatHang { get; set; } // Mã của Sản phẩm hoặc Thú cưng
-        public string LoaiMatHang { get; set; } // "SP" hoặc "TC"
-        public string MaNhanVien { get; set; } // Người nhập
-        public int SoLuongNhap { get; set; }
-        public DateTime NgayLapPhieu { get; set; }
+        FileXml Fxml = new FileXml();
 
-        // Constructor không tham số (Bắt buộc để Serialize XML)
-        public PhieuNhap() { }
-
-        // Constructor đầy đủ (để dễ tạo mới)
-        public PhieuNhap(int ma, string maHang, string loai, string maNV, int sl, DateTime ngay)
+        // =========================================================
+        // 1) LẤY MÃ PHIẾU NHẬP TIẾP THEO
+        // =========================================================
+        public int LayMaPhieuTiepTheo()
         {
-            this.MaPhieu = ma;
-            this.MaMatHang = maHang;
-            this.LoaiMatHang = loai;
-            this.MaNhanVien = maNV;
-            this.SoLuongNhap = sl;
-            this.NgayLapPhieu = ngay;
+            DataTable dt = Fxml.HienThi("PhieuNhap.xml");
+
+            if (dt == null || dt.Rows.Count == 0)
+                return 1;
+
+            return dt.AsEnumerable()
+                     .Max(row => int.Parse(row["MaPhieu"].ToString())) + 1;
+        }
+
+        // =========================================================
+        // 2) KIỂM TRA MÃ PHIẾU
+        // =========================================================
+        public bool kiemtraMaPhieu(string MaPhieu)
+        {
+            string giaTri = Fxml.LayGiaTri("PhieuNhap.xml", "MaPhieu", MaPhieu, "MaPhieu");
+            return !string.IsNullOrEmpty(giaTri);
+        }
+
+        // =========================================================
+        // 3) THÊM PHIẾU NHẬP
+        // =========================================================
+        public void themPN(string MaMatHang, string LoaiMatHang,
+                           string MaNhanVien, int SoLuongNhap, string NgayLap)
+        {
+            int maPhieuMoi = LayMaPhieuTiepTheo();
+
+            string noiDung =
+                "<PhieuNhap>" +
+                "<MaPhieu>" + maPhieuMoi + "</MaPhieu>" +
+                "<MaMatHang>" + MaMatHang + "</MaMatHang>" +
+                "<LoaiMatHang>" + LoaiMatHang + "</LoaiMatHang>" +
+                "<MaNhanVien>" + MaNhanVien + "</MaNhanVien>" +
+                "<SoLuongNhap>" + SoLuongNhap + "</SoLuongNhap>" +
+                "<NgayLapPhieu>" + NgayLap + "</NgayLapPhieu>" +
+                "</PhieuNhap>";
+
+            // Ghi đúng đường dẫn Data\
+            Fxml.Them("Data\\PhieuNhap.xml", noiDung);
+
+            // TODO: update kho / thêm thú cưng nếu LoaiMatHang = TC
+        }
+
+        // =========================================================
+        // 4) XÓA PHIẾU NHẬP
+        // =========================================================
+        public void xoaPN(string MaPhieu)
+        {
+            // Xóa đúng file PhieuNhap.xml (FileXml tự thêm folder Data)
+            Fxml.Xoa("PhieuNhap.xml", "PhieuNhap", "MaPhieu", MaPhieu);
         }
     }
 }

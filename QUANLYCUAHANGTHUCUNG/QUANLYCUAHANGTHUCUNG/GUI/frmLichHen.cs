@@ -1,18 +1,14 @@
-﻿using QuanLyCuaHangThuCung.Class;
-using QuanLyThuCung.Class; // Namespace chứa FileXml và các Class Model (KhachHang, DichVu, LichHen)
-using System;
-using System.Collections.Generic;
-using System.Linq; // Để dùng LINQ (tìm kiếm, lọc, join)
+﻿using System;
+using System.Data;
 using System.Windows.Forms;
+using QuanLyCuaHangThuCung.Class;
 
 namespace QuanLyCuaHangThuCung.GUI
 {
     public partial class frmLichHen : Form
     {
-        // Khai báo List để chứa dữ liệu XML
-        List<LichHen> listLichHen;
-        List<KhachHang> listKhachHang;
-        List<DichVu> listDichVu;
+        LichHenBLL lichHenBLL = new LichHenBLL();
+        FileXml Fxml = new FileXml();
 
         public frmLichHen()
         {
@@ -21,211 +17,389 @@ namespace QuanLyCuaHangThuCung.GUI
 
         private void frmLichHen_Load(object sender, EventArgs e)
         {
-            // Đặt ngày mặc định trước khi load dữ liệu
-            dtpNgayXem.Value = DateTime.Now;
-
-            LoadComboBoxData();
-            LoadLichHen();
+            LoadData();
+            LoadComboBoxes();
+            LoadGioHen();
+            LoadTrangThai();
+            txtMaLichHen.Text = "Tự động";
         }
 
-        // --- LOAD DỮ LIỆU CƠ SỞ (ComboBox) TỪ XML ---
-        private void LoadComboBoxData()
+        // Load dữ liệu lên DataGridView
+        private void LoadData()
+        {
+            try
+            {
+                DataTable dt = Fxml.HienThi("LichHen.xml");
+
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    // Tạo DataTable mới với thông tin đầy đủ
+                    DataTable dtDisplay = new DataTable();
+                    dtDisplay.Columns.Add("Mã LH", typeof(int));
+                    dtDisplay.Columns.Add("Mã KH", typeof(string));
+                    dtDisplay.Columns.Add("Tên KH", typeof(string));
+                    dtDisplay.Columns.Add("Mã DV", typeof(string));
+                    dtDisplay.Columns.Add("Tên DV", typeof(string));
+                    dtDisplay.Columns.Add("Ngày hẹn", typeof(string));
+                    dtDisplay.Columns.Add("Giờ hẹn", typeof(string));
+                    dtDisplay.Columns.Add("Trạng thái", typeof(string));
+
+                    // Load dữ liệu Khách hàng và Dịch vụ
+                    DataTable dtKH = Fxml.HienThi("KhachHang.xml");
+                    DataTable dtDV = Fxml.HienThi("DichVu.xml");
+
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        DataRow newRow = dtDisplay.NewRow();
+                        newRow["Mã LH"] = row["MaLichHen"];
+                        newRow["Mã KH"] = row["MaKhachHang"];
+                        newRow["Mã DV"] = row["MaDichVu"];
+                        newRow["Ngày hẹn"] = row["NgayHen"];
+                        newRow["Giờ hẹn"] = row["GioHen"];
+                        newRow["Trạng thái"] = row["TrangThai"];
+
+                        // Tìm tên khách hàng
+                        if (dtKH != null)
+                        {
+                            DataRow[] khRows = dtKH.Select($"MaKH = '{row["MaKhachHang"]}'");
+                            if (khRows.Length > 0)
+                            {
+                                newRow["Tên KH"] = khRows[0]["TenKH"];
+                            }
+                        }
+
+                        // Tìm tên dịch vụ
+                        if (dtDV != null)
+                        {
+                            DataRow[] dvRows = dtDV.Select($"MaDV = '{row["MaDichVu"]}'");
+                            if (dvRows.Length > 0)
+                            {
+                                newRow["Tên DV"] = dvRows[0]["TenDV"];
+                            }
+                        }
+
+                        dtDisplay.Rows.Add(newRow);
+                    }
+
+                    dgvLichHen.DataSource = dtDisplay;
+
+                    // Định dạng hiển thị
+                    dgvLichHen.Columns["Mã LH"].Width = 70;
+                    dgvLichHen.Columns["Mã KH"].Width = 80;
+                    dgvLichHen.Columns["Tên KH"].Width = 150;
+                    dgvLichHen.Columns["Mã DV"].Width = 80;
+                    dgvLichHen.Columns["Tên DV"].Width = 150;
+                    dgvLichHen.Columns["Ngày hẹn"].Width = 100;
+                    dgvLichHen.Columns["Giờ hẹn"].Width = 80;
+                }
+                else
+                {
+                    dgvLichHen.DataSource = null;
+                    MessageBox.Show("Chưa có lịch hẹn nào!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi load dữ liệu: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Load ComboBox Khách hàng
+        private void LoadComboBoxes()
         {
             try
             {
                 // Load Khách hàng
-                listKhachHang = FileXml.DocFile<KhachHang>("KhachHang.xml");
-                cboKhachHang.DataSource = listKhachHang;
-                cboKhachHang.DisplayMember = "TenKhachHang";
-                cboKhachHang.ValueMember = "MaKhachHang";
+                DataTable dtKH = Fxml.HienThi("KhachHang.xml");
+                if (dtKH != null && dtKH.Rows.Count > 0)
+                {
+                    cboMaKhachHang.DisplayMember = "Display";
+                    cboMaKhachHang.ValueMember = "MaKH";
+
+                    DataTable dtKHDisplay = new DataTable();
+                    dtKHDisplay.Columns.Add("MaKH", typeof(string));
+                    dtKHDisplay.Columns.Add("Display", typeof(string));
+
+                    foreach (DataRow row in dtKH.Rows)
+                    {
+                        DataRow newRow = dtKHDisplay.NewRow();
+                        newRow["MaKH"] = row["MaKH"];
+                        newRow["Display"] = $"{row["MaKH"]} - {row["TenKH"]}";
+                        dtKHDisplay.Rows.Add(newRow);
+                    }
+
+                    cboMaKhachHang.DataSource = dtKHDisplay;
+                }
 
                 // Load Dịch vụ
-                listDichVu = FileXml.DocFile<DichVu>("DichVu.xml");
-                cboDichVu.DataSource = listDichVu;
-                cboDichVu.DisplayMember = "TenDV";
-                cboDichVu.ValueMember = "MaDV";
+                DataTable dtDV = Fxml.HienThi("DichVu.xml");
+                if (dtDV != null && dtDV.Rows.Count > 0)
+                {
+                    cboMaDichVu.DisplayMember = "Display";
+                    cboMaDichVu.ValueMember = "MaDV";
 
-                // Giả định ComboBox Trạng thái đã được điền sẵn
-                if (cboTrangThai.Items.Count > 0)
-                    cboTrangThai.SelectedIndex = 0;
+                    DataTable dtDVDisplay = new DataTable();
+                    dtDVDisplay.Columns.Add("MaDV", typeof(string));
+                    dtDVDisplay.Columns.Add("Display", typeof(string));
+
+                    foreach (DataRow row in dtDV.Rows)
+                    {
+                        DataRow newRow = dtDVDisplay.NewRow();
+                        newRow["MaDV"] = row["MaDV"];
+                        newRow["Display"] = $"{row["MaDV"]} - {row["TenDV"]} ({row["GiaDV"]:N0} VNĐ)";
+                        dtDVDisplay.Rows.Add(newRow);
+                    }
+
+                    cboMaDichVu.DataSource = dtDVDisplay;
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tải dữ liệu danh mục: " + ex.Message);
+                MessageBox.Show("Lỗi khi load ComboBox: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        // --- LOAD LỊCH HẸN (Dùng LINQ Join - Đã Fix lỗi GioHen NULL) ---
-        private void LoadLichHen()
+        // Load giờ hẹn (8h-18h)
+        private void LoadGioHen()
         {
-            try
+            cboGioHen.Items.Clear();
+            for (int h = 8; h <= 18; h++)
             {
-                // Tải lịch hẹn và kiểm tra an toàn dữ liệu
-                listLichHen = FileXml.DocFile<LichHen>("LichHen.xml");
-
-                // Lọc theo ngày xem và kiểm tra các khóa ngoại + GioHen không bị null trước khi join
-                DateTime ngayXem = dtpNgayXem.Value.Date;
-                var lichLoc = listLichHen
-                    .Where(l => l.MaKhachHang != null && l.MaDichVu != null) // Kiểm tra khóa ngoại
-                    .Where(l => l.NgayHen.Date == ngayXem)
-                    .Where(l => l.GioHen != null) // <--- FIX LỖI: Đảm bảo GioHen không null khi sắp xếp
-                    .ToList();
-
-                // Dùng LINQ Join để lấy Tên Khách hàng và Tên Dịch vụ
-                var hienThi = from lh in lichLoc
-                              join kh in listKhachHang on lh.MaKhachHang equals kh.MaKhachHang
-                              join dv in listDichVu on lh.MaDichVu equals dv.MaDV
-                              orderby lh.GioHen ascending // Sắp xếp sau khi đã loại bỏ các bản ghi null
-                              select new
-                              {
-                                  lh.MaLichHen,
-                                  TenKhachHang = kh.TenKhachHang,
-                                  TenDV = dv.TenDV,
-                                  lh.NgayHen,
-                                  lh.GioHen,
-                                  lh.TrangThai
-                              };
-
-                dgvLichHen.DataSource = null;
-                dgvLichHen.DataSource = hienThi.ToList();
+                cboGioHen.Items.Add($"{h:D2}:00");
+                if (h < 18)
+                    cboGioHen.Items.Add($"{h:D2}:30");
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi tải lịch hẹn: " + ex.Message);
-            }
+            cboGioHen.SelectedIndex = 0;
         }
 
-        private void dtpNgayXem_ValueChanged(object sender, EventArgs e)
+        // Load trạng thái
+        private void LoadTrangThai()
         {
-            LoadLichHen(); // Tự động load lại lịch khi đổi ngày
+            cboTrangThai.Items.Clear();
+            cboTrangThai.Items.Add("Chờ xác nhận");
+            cboTrangThai.Items.Add("Đã xác nhận");
+            cboTrangThai.Items.Add("Đang thực hiện");
+            cboTrangThai.Items.Add("Hoàn thành");
+            cboTrangThai.Items.Add("Đã hủy");
+            cboTrangThai.SelectedIndex = 0;
         }
 
+        // Sự kiện Click vào DataGridView
         private void dgvLichHen_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
-                DataGridViewRow row = dgvLichHen.Rows[e.RowIndex];
-
-                // Lấy các giá trị hiển thị
-                txtMaLich.Text = row.Cells["MaLichHen"].Value?.ToString();
-
-                // Set ComboBox dựa trên giá trị text
-                cboKhachHang.Text = row.Cells["TenKhachHang"].Value?.ToString();
-                cboDichVu.Text = row.Cells["TenDV"].Value?.ToString();
-
-                if (row.Cells["NgayHen"].Value != null)
-                    dtpNgayHen.Value = Convert.ToDateTime(row.Cells["NgayHen"].Value);
-
-                if (row.Cells["GioHen"].Value != null)
-                    dtpGioHen.Value = DateTime.Today.Add((TimeSpan)row.Cells["GioHen"].Value);
-
-                cboTrangThai.Text = row.Cells["TrangThai"].Value?.ToString();
-            }
-        }
-
-        // --- NÚT ĐẶT LỊCH (INSERT XML) ---
-        private void btnDatLich_Click(object sender, EventArgs e)
-        {
-            if (cboKhachHang.SelectedValue == null || cboDichVu.SelectedValue == null) return;
-
-            try
-            {
-                // Tạo ID tự tăng (Giả lập Identity)
-                int nextId = 1;
-                if (listLichHen.Count > 0)
-                    nextId = listLichHen.Max(l => l.MaLichHen) + 1;
-
-                LichHen lh = new LichHen()
-                {
-                    MaLichHen = nextId,
-                    MaKhachHang = cboKhachHang.SelectedValue.ToString(),
-                    MaDichVu = cboDichVu.SelectedValue.ToString(),
-                    NgayHen = dtpNgayHen.Value.Date,
-                    GioHen = dtpGioHen.Value.TimeOfDay,
-                    TrangThai = "Chờ xác nhận"
-                };
-
-                listLichHen.Add(lh);
-                FileXml.GhiFile("LichHen.xml", listLichHen); // Lưu XML
-
-                MessageBox.Show("Đặt lịch thành công!");
-                LoadLichHen();
-                btnLamMoi_Click(sender, e);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi đặt lịch: " + ex.Message);
-            }
-        }
-
-        // --- NÚT CẬP NHẬT (UPDATE XML) ---
-        private void btnCapNhat_Click(object sender, EventArgs e)
-        {
-            if (txtMaLich.Text == "") return;
-
-            try
-            {
-                int maLich = Convert.ToInt32(txtMaLich.Text);
-
-                // Tìm lịch hẹn cần sửa
-                var lh = listLichHen.FirstOrDefault(l => l.MaLichHen == maLich);
-
-                if (lh != null)
-                {
-                    // Cập nhật thông tin mới
-                    lh.MaKhachHang = cboKhachHang.SelectedValue.ToString();
-                    lh.MaDichVu = cboDichVu.SelectedValue.ToString();
-                    lh.NgayHen = dtpNgayHen.Value.Date;
-                    lh.GioHen = dtpGioHen.Value.TimeOfDay;
-                    lh.TrangThai = cboTrangThai.Text;
-
-                    FileXml.GhiFile("LichHen.xml", listLichHen); // Lưu XML
-
-                    MessageBox.Show("Cập nhật thành công!");
-                    LoadLichHen();
-                    btnLamMoi_Click(sender, e);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi cập nhật: " + ex.Message);
-            }
-        }
-
-        // --- NÚT HỦY (DELETE XML) ---
-        private void btnHuyLich_Click(object sender, EventArgs e)
-        {
-            if (txtMaLich.Text == "") return;
-
-            if (MessageBox.Show("Hủy lịch này?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
                 try
                 {
-                    int maLich = Convert.ToInt32(txtMaLich.Text);
+                    DataGridViewRow row = dgvLichHen.Rows[e.RowIndex];
 
-                    var lh = listLichHen.FirstOrDefault(l => l.MaLichHen == maLich);
+                    txtMaLichHen.Text = row.Cells["Mã LH"].Value.ToString();
 
-                    if (lh != null)
+                    // Set ComboBox Khách hàng
+                    string maKH = row.Cells["Mã KH"].Value.ToString();
+                    for (int i = 0; i < cboMaKhachHang.Items.Count; i++)
                     {
-                        listLichHen.Remove(lh);
-                        FileXml.GhiFile("LichHen.xml", listLichHen); // Lưu XML
-                        LoadLichHen();
-                        btnLamMoi_Click(sender, e);
+                        DataRowView item = (DataRowView)cboMaKhachHang.Items[i];
+                        if (item["MaKH"].ToString() == maKH)
+                        {
+                            cboMaKhachHang.SelectedIndex = i;
+                            break;
+                        }
                     }
+
+                    // Set ComboBox Dịch vụ
+                    string maDV = row.Cells["Mã DV"].Value.ToString();
+                    for (int i = 0; i < cboMaDichVu.Items.Count; i++)
+                    {
+                        DataRowView item = (DataRowView)cboMaDichVu.Items[i];
+                        if (item["MaDV"].ToString() == maDV)
+                        {
+                            cboMaDichVu.SelectedIndex = i;
+                            break;
+                        }
+                    }
+
+                    dtpNgayHen.Value = DateTime.Parse(row.Cells["Ngày hẹn"].Value.ToString());
+                    cboGioHen.Text = row.Cells["Giờ hẹn"].Value.ToString();
+                    cboTrangThai.Text = row.Cells["Trạng thái"].Value.ToString();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Lỗi hủy lịch: " + ex.Message);
+                    MessageBox.Show("Lỗi khi chọn dữ liệu: " + ex.Message, "Lỗi",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
+        // Nút Thêm
+        private void btnThem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (cboMaKhachHang.SelectedValue == null || cboMaDichVu.SelectedValue == null)
+                {
+                    MessageBox.Show("Vui lòng chọn đầy đủ thông tin!", "Cảnh báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string maKH = cboMaKhachHang.SelectedValue.ToString();
+                string maDV = cboMaDichVu.SelectedValue.ToString();
+                string ngayHen = dtpNgayHen.Value.ToString("yyyy-MM-dd");
+                string gioHen = cboGioHen.Text;
+                string trangThai = cboTrangThai.Text;
+
+                // Kiểm tra ngày hẹn không được trong quá khứ
+                DateTime ngayHenDate = DateTime.Parse(ngayHen);
+                if (ngayHenDate.Date < DateTime.Now.Date)
+                {
+                    MessageBox.Show("Ngày hẹn không được trong quá khứ!", "Cảnh báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                lichHenBLL.themLH(maKH, maDV, ngayHen, gioHen, trangThai);
+
+                MessageBox.Show("Thêm lịch hẹn thành công!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                LoadData();
+                LamMoi();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi thêm lịch hẹn: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Nút Sửa
+        private void btnSua_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(txtMaLichHen.Text) || txtMaLichHen.Text == "Tự động")
+                {
+                    MessageBox.Show("Vui lòng chọn lịch hẹn cần sửa!", "Cảnh báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (cboMaKhachHang.SelectedValue == null || cboMaDichVu.SelectedValue == null)
+                {
+                    MessageBox.Show("Vui lòng chọn đầy đủ thông tin!", "Cảnh báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string maLH = txtMaLichHen.Text;
+                string maKH = cboMaKhachHang.SelectedValue.ToString();
+                string maDV = cboMaDichVu.SelectedValue.ToString();
+                string ngayHen = dtpNgayHen.Value.ToString("yyyy-MM-dd");
+                string gioHen = cboGioHen.Text;
+                string trangThai = cboTrangThai.Text;
+
+                DialogResult result = MessageBox.Show(
+                    "Bạn có chắc muốn sửa lịch hẹn này?",
+                    "Xác nhận",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    lichHenBLL.suaLH(maLH, maKH, maDV, ngayHen, gioHen, trangThai);
+
+                    MessageBox.Show("Sửa lịch hẹn thành công!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    LoadData();
+                    LamMoi();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi sửa lịch hẹn: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Nút Xóa
+        private void btnXoa_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(txtMaLichHen.Text) || txtMaLichHen.Text == "Tự động")
+                {
+                    MessageBox.Show("Vui lòng chọn lịch hẹn cần xóa!", "Cảnh báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string maLH = txtMaLichHen.Text;
+
+                if (!lichHenBLL.kiemtraMaLichHen(maLH))
+                {
+                    MessageBox.Show("Lịch hẹn không tồn tại!", "Cảnh báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                DialogResult result = MessageBox.Show(
+                    "Bạn có chắc muốn xóa lịch hẹn này?",
+                    "Xác nhận xóa",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (result == DialogResult.Yes)
+                {
+                    lichHenBLL.xoaLH(maLH);
+
+                    MessageBox.Show("Xóa lịch hẹn thành công!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    LoadData();
+                    LamMoi();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi xóa lịch hẹn: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Nút Làm mới
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
-            txtMaLich.Clear();
-            cboTrangThai.SelectedIndex = 0;
+            LamMoi();
+        }
+
+        // Hàm làm mới form
+        private void LamMoi()
+        {
+            txtMaLichHen.Text = "Tự động";
+
+            if (cboMaKhachHang.Items.Count > 0)
+                cboMaKhachHang.SelectedIndex = 0;
+
+            if (cboMaDichVu.Items.Count > 0)
+                cboMaDichVu.SelectedIndex = 0;
+
             dtpNgayHen.Value = DateTime.Now;
-            dtpGioHen.Value = DateTime.Now;
+
+            if (cboGioHen.Items.Count > 0)
+                cboGioHen.SelectedIndex = 0;
+
+            if (cboTrangThai.Items.Count > 0)
+                cboTrangThai.SelectedIndex = 0;
+        }
+
+        private void dgvLichHen_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

@@ -48,15 +48,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class\ChamCong.cs" />
     <Compile Include="Class\DangNhap.cs" />
     <Compile Include="Class\DichVu.cs" />
     <Compile Include="Class\DoiMatKhau.cs" />
     <Compile Include="Class\FileXml.cs" />
+    <Compile Include="Class\GlobalVariables.cs" />
     <Compile Include="Class\HeThong.cs" />
     <Compile Include="Class\HoaDon.cs" />
     <Compile Include="Class\KhachHang.cs" />
     <Compile Include="Class\LichHen.cs" />
+    <Compile Include="Class\Main.cs" />
+    <Compile Include="Class\NhaCungCap.cs" />
     <Compile Include="Class\NhanVien.cs" />
     <Compile Include="Class\PhieuNhap.cs" />
     <Compile Include="Class\SanPham.cs" />
@@ -103,11 +105,11 @@
     <Compile Include="GUI\frmLichHen.Designer.cs">
       <DependentUpon>frmLichHen.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\frmMain.cs">
+    <Compile Include="GUI\frmMainNew.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\frmMain.Designer.cs">
-      <DependentUpon>frmMain.cs</DependentUpon>
+    <Compile Include="GUI\frmMainNew.Designer.cs">
+      <DependentUpon>frmMainNew.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\frmNhanVien.cs">
       <SubType>Form</SubType>
@@ -139,7 +141,6 @@
     <Compile Include="GUI\frmQuanLyThuCung.Designer.cs">
       <DependentUpon>frmQuanLyThuCung.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\NhaCungCap.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="GUI\frmBanHang.resx">
@@ -147,6 +148,39 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\frmBaoCao.resx">
       <DependentUpon>frmBaoCao.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmDangNhap.resx">
+      <DependentUpon>frmDangNhap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmDoiMatKhau.resx">
+      <DependentUpon>frmDoiMatKhau.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmHeThong.resx">
+      <DependentUpon>frmHeThong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmKhachHang.resx">
+      <DependentUpon>frmKhachHang.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmLichHen.resx">
+      <DependentUpon>frmLichHen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmMainNew.resx">
+      <DependentUpon>frmMainNew.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmNhanVien.resx">
+      <DependentUpon>frmNhanVien.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmPhieuNhap.resx">
+      <DependentUpon>frmPhieuNhap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmQuanLyDichVu.resx">
+      <DependentUpon>frmQuanLyDichVu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmQuanLySanPham.resx">
+      <DependentUpon>frmQuanLySanPham.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmQuanLyThuCung.resx">
+      <DependentUpon>frmQuanLyThuCung.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -170,6 +204,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

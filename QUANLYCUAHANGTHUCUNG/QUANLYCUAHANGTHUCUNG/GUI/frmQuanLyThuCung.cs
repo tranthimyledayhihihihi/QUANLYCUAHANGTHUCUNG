@@ -1,202 +1,285 @@
 ﻿using System;
-using System.Collections.Generic; // Để dùng List
-using System.Linq; // Để dùng LINQ (tìm kiếm, xóa)
+using System.Data;
+using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
-using QuanLyThuCung.Class; // Namespace chứa FileXml và Models (ThuCung, NhaCungCap)
 
 namespace QuanLyCuaHangThuCung.GUI
 {
     public partial class frmQuanLyThuCung : Form
     {
-        // Khai báo List để chứa dữ liệu XML
-        List<ThuCung> listTC = new List<ThuCung>();
-        List<NhaCungCap> listNCC = new List<NhaCungCap>();
+        private string xmlFilePath;
+        private DataSet dsThuCung;
 
         public frmQuanLyThuCung()
         {
             InitializeComponent();
+
+            xmlFilePath = Application.StartupPath + "\\Data\\ThuCung.xml";
+            dsThuCung = new DataSet();
+
+            ApplyColorTheme();
         }
 
+        // ================================
+        // GIAO DIỆN MÀU SẮC
+        // ================================
+        private void ApplyColorTheme()
+        {
+            this.BackColor = Color.White;
+
+            groupBox1.BackColor = Color.FromArgb(253, 221, 230);
+            groupBox1.ForeColor = Color.Black;
+
+            dgvThuCung.BackgroundColor = Color.White;
+            dgvThuCung.BorderStyle = BorderStyle.None;
+            dgvThuCung.EnableHeadersVisualStyles = false;
+            dgvThuCung.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(200, 247, 220);
+            dgvThuCung.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+            dgvThuCung.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dgvThuCung.ColumnHeadersDefaultCellStyle.Padding = new Padding(5);
+            dgvThuCung.ColumnHeadersHeight = 40;
+
+            dgvThuCung.RowsDefaultCellStyle.BackColor = Color.White;
+            dgvThuCung.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(240, 248, 255);
+            dgvThuCung.RowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(200, 247, 220);
+            dgvThuCung.RowsDefaultCellStyle.SelectionForeColor = Color.Black;
+            dgvThuCung.RowTemplate.Height = 35;
+
+            StyleButton(btnThem, Color.FromArgb(72, 201, 176));
+            StyleButton(btnSua, Color.FromArgb(255, 193, 7));
+            StyleButton(btnXoa, Color.FromArgb(244, 67, 54));
+            StyleButton(btnLamMoi, Color.FromArgb(33, 150, 243));
+        }
+
+        private void StyleButton(Button btn, Color backColor)
+        {
+            btn.BackColor = backColor;
+            btn.ForeColor = Color.White;
+            btn.FlatStyle = FlatStyle.Flat;
+            btn.FlatAppearance.BorderSize = 0;
+            btn.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btn.Cursor = Cursors.Hand;
+
+            btn.MouseEnter += (s, e) =>
+            {
+                btn.BackColor = ControlPaint.Light(backColor, 0.2f);
+            };
+            btn.MouseLeave += (s, e) =>
+            {
+                btn.BackColor = backColor;
+            };
+        }
+
+        // ================================
+        // FORM LOAD
+        // ================================
         private void frmQuanLyThuCung_Load(object sender, EventArgs e)
         {
+            LoadThuCung();
             LoadNhaCungCap();
-            LoadData();
-
-            // Giả định ComboBox đã được điền item. Set mặc định index 0
-            if (cboLoai.Items.Count > 0) cboLoai.SelectedIndex = 0;
-            if (cboTrangThai.Items.Count > 0) cboTrangThai.SelectedIndex = 0;
         }
 
-        // 1. TẢI DỮ LIỆU THÚ CƯNG
-        private void LoadData()
+        // ================================
+        // LOAD DANH SÁCH THÚ CƯNG
+        // ================================
+        private void LoadThuCung()
         {
             try
             {
-                // Đọc file XML Thú cưng
-                listTC = FileXml.DocFile<ThuCung>("ThuCung.xml");
+                if (!File.Exists(xmlFilePath))
+                {
+                    // Tạo file rỗng nếu mất file
+                    DataSet ds = new DataSet("NewDataSet");
+                    ds.Tables.Add("ThuCung");
+                    ds.Tables["ThuCung"].Columns.Add("MaThuCung");
+                    ds.Tables["ThuCung"].Columns.Add("TenThuCung");
+                    ds.Tables["ThuCung"].Columns.Add("LoaiThuCung");
+                    ds.Tables["ThuCung"].Columns.Add("Giong");
+                    ds.Tables["ThuCung"].Columns.Add("GioiTinh");
+                    ds.Tables["ThuCung"].Columns.Add("NgaySinh");
+                    ds.Tables["ThuCung"].Columns.Add("GiaNhap");
+                    ds.Tables["ThuCung"].Columns.Add("GiaBan");
+                    ds.Tables["ThuCung"].Columns.Add("MaNCC");
+                    ds.Tables["ThuCung"].Columns.Add("TrangThai");
 
-                // Đổ vào DataGridView
-                dgvThuCung.DataSource = null;
-                dgvThuCung.DataSource = listTC;
+                    ds.WriteXml(xmlFilePath, XmlWriteMode.WriteSchema);
+                }
+
+                dsThuCung.Clear();
+                dsThuCung.ReadXml(xmlFilePath);
+
+                dgvThuCung.DataSource = dsThuCung.Tables["ThuCung"];
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tải dữ liệu thú cưng: " + ex.Message);
+                MessageBox.Show("Lỗi tải dữ liệu: " + ex.Message);
             }
         }
 
-        // 2. TẢI DANH MỤC NHÀ CUNG CẤP (XML)
+        // ================================
+        // LOAD NHÀ CUNG CẤP TỪ XML
+        // ================================
         private void LoadNhaCungCap()
+        {
+            cboNCC.Items.Clear();
+
+            string nccFile = Application.StartupPath + "\\Data\\NhaCungCap.xml";
+
+            if (!File.Exists(nccFile))
+                return;
+
+            DataSet ds = new DataSet();
+            ds.ReadXml(nccFile);
+
+            if (ds.Tables.Contains("NhaCungCap"))
+            {
+                foreach (DataRow row in ds.Tables["NhaCungCap"].Rows)
+                {
+                    cboNCC.Items.Add(row["MaNCC"].ToString());
+                }
+            }
+        }
+
+        // ================================
+        // CLICK ROW
+        // ================================
+        private void dgvThuCung_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            DataRow row = dsThuCung.Tables["ThuCung"].Rows[e.RowIndex];
+
+            txtMaTC.Text = row["MaThuCung"].ToString();
+            txtTenTC.Text = row["TenThuCung"].ToString();
+            cboLoai.Text = row["LoaiThuCung"].ToString();
+            txtGiong.Text = row["Giong"].ToString();
+            cboGioiTinh.Text = row["GioiTinh"].ToString();
+
+            DateTime.TryParse(row["NgaySinh"].ToString(), out DateTime ngay);
+            dtpNgaySinh.Value = ngay;
+
+            numGiaNhap.Value = Convert.ToDecimal(row["GiaNhap"]);
+            numGiaBan.Value = Convert.ToDecimal(row["GiaBan"]);
+
+            cboNCC.Text = row["MaNCC"].ToString();
+            cboTrangThai.Text = row["TrangThai"].ToString();
+        }
+
+        // ================================
+        // THÊM
+        // ================================
+        private void btnThem_Click(object sender, EventArgs e)
         {
             try
             {
-                // Đọc file XML Nhà Cung Cấp
-                listNCC = FileXml.DocFile<NhaCungCap>("NhaCungCap.xml");
+                if (txtMaTC.Text == "" || txtTenTC.Text == "")
+                {
+                    MessageBox.Show("Vui lòng nhập đầy đủ thông tin!");
+                    return;
+                }
 
-                cboNCC.DataSource = listNCC;
-                cboNCC.DisplayMember = "TenNCC";
-                cboNCC.ValueMember = "MaNCC";
+                DataRow newRow = dsThuCung.Tables["ThuCung"].NewRow();
+
+                newRow["MaThuCung"] = txtMaTC.Text.Trim();
+                newRow["TenThuCung"] = txtTenTC.Text.Trim();
+                newRow["LoaiThuCung"] = cboLoai.Text;
+                newRow["Giong"] = txtGiong.Text.Trim();
+                newRow["GioiTinh"] = cboGioiTinh.Text;
+                newRow["NgaySinh"] = dtpNgaySinh.Value.ToString("yyyy-MM-ddTHH:mm:sszzz");
+                newRow["GiaNhap"] = (int)numGiaNhap.Value;
+                newRow["GiaBan"] = (int)numGiaBan.Value;
+                newRow["MaNCC"] = cboNCC.Text;
+                newRow["TrangThai"] = cboTrangThai.Text;
+
+                dsThuCung.Tables["ThuCung"].Rows.Add(newRow);
+                dsThuCung.WriteXml(xmlFilePath);
+
+                MessageBox.Show("Thêm thú cưng thành công!");
+                LoadThuCung();
+                LamMoi();
             }
-            catch { }
-        }
-
-        // 3. HIỂN THỊ LÊN Ô NHẬP KHI CLICK
-        private void dgvThuCung_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
+            catch (Exception ex)
             {
-                DataGridViewRow row = dgvThuCung.Rows[e.RowIndex];
-
-                txtMaTC.Text = row.Cells["MaThuCung"].Value?.ToString();
-                txtTenTC.Text = row.Cells["TenThuCung"].Value?.ToString();
-
-                // Lấy giá trị string cho các ComboBox
-                if (row.Cells["LoaiThuCung"].Value != null)
-                    cboLoai.Text = row.Cells["LoaiThuCung"].Value.ToString();
-
-                txtGiong.Text = row.Cells["Giong"].Value?.ToString();
-
-                // Chuyển đổi giá trị số
-                if (row.Cells["GiaBan"].Value != null)
-                    numGiaBan.Value = Convert.ToDecimal(row.Cells["GiaBan"].Value);
-
-                if (row.Cells["TrangThai"].Value != null)
-                    cboTrangThai.Text = row.Cells["TrangThai"].Value.ToString();
-
-                // Set MaNCC cho ComboBox (Sử dụng ValueMember)
-                if (row.Cells["MaNCC"].Value != null)
-                    cboNCC.SelectedValue = row.Cells["MaNCC"].Value.ToString();
-
-                txtMaTC.Enabled = false;
+                MessageBox.Show("Lỗi: " + ex.Message);
             }
         }
 
-        // 4. THÊM (INSERT XML)
-        private void btnThem_Click(object sender, EventArgs e)
+        // ================================
+        // SỬA
+        // ================================
+        private void btnSua_Click(object sender, EventArgs e)
         {
-            if (txtMaTC.Text == "" || txtTenTC.Text == "") return;
-
-            // Kiểm tra trùng mã
-            if (listTC.Any(x => x.MaThuCung == txtMaTC.Text.Trim()))
+            if (txtMaTC.Text == "")
             {
-                MessageBox.Show("Mã thú cưng đã tồn tại!");
+                MessageBox.Show("Vui lòng chọn thú cưng để sửa!");
                 return;
             }
 
-            try
-            {
-                ThuCung tc = new ThuCung()
-                {
-                    MaThuCung = txtMaTC.Text.Trim(),
-                    TenThuCung = txtTenTC.Text.Trim(),
-                    LoaiThuCung = cboLoai.Text,
-                    Giong = txtGiong.Text.Trim(),
-                    GioiTinh = "Chưa rõ", // Chưa có ô nhập, gán mặc định
-                    NgaySinh = DateTime.Now, // Chưa có ô nhập, gán mặc định
-                    GiaNhap = 0, // Chưa có ô nhập, gán mặc định
-                    GiaBan = (int)numGiaBan.Value,
-                    TrangThai = cboTrangThai.Text,
-                    MaNCC = cboNCC.SelectedValue?.ToString(),
-                    SoLuong = 1 // Thú cưng thường là đơn chiếc
-                };
+            DataRow[] rows = dsThuCung.Tables["ThuCung"].Select($"MaThuCung='{txtMaTC.Text}'");
 
-                // Thêm vào List và Ghi File
-                listTC.Add(tc);
-                FileXml.GhiFile("ThuCung.xml", listTC);
+            if (rows.Length == 0) return;
 
-                MessageBox.Show("Thêm thành công!");
-                LoadData();
-                btnLamMoi_Click(sender, e);
-            }
-            catch (Exception ex) { MessageBox.Show("Lỗi: " + ex.Message); }
+            DataRow r = rows[0];
+
+            r["TenThuCung"] = txtTenTC.Text.Trim();
+            r["LoaiThuCung"] = cboLoai.Text;
+            r["Giong"] = txtGiong.Text.Trim();
+            r["GioiTinh"] = cboGioiTinh.Text;
+            r["NgaySinh"] = dtpNgaySinh.Value.ToString("yyyy-MM-ddTHH:mm:sszzz");
+            r["GiaNhap"] = (int)numGiaNhap.Value;
+            r["GiaBan"] = (int)numGiaBan.Value;
+            r["MaNCC"] = cboNCC.Text;
+            r["TrangThai"] = cboTrangThai.Text;
+
+            dsThuCung.WriteXml(xmlFilePath);
+
+            MessageBox.Show("Sửa thành công!");
+            LoadThuCung();
+            LamMoi();
         }
 
-        // 5. SỬA (UPDATE XML)
-        private void btnSua_Click(object sender, EventArgs e)
-        {
-            if (txtMaTC.Text == "") return;
-
-            try
-            {
-                // Tìm thú cưng trong List
-                var tc = listTC.FirstOrDefault(x => x.MaThuCung == txtMaTC.Text);
-
-                if (tc != null)
-                {
-                    // Cập nhật thông tin
-                    tc.TenThuCung = txtTenTC.Text.Trim();
-                    tc.LoaiThuCung = cboLoai.Text;
-                    tc.Giong = txtGiong.Text.Trim();
-                    tc.GiaBan = (int)numGiaBan.Value;
-                    tc.TrangThai = cboTrangThai.Text;
-                    tc.MaNCC = cboNCC.SelectedValue?.ToString();
-
-                    // Lưu lại File
-                    FileXml.GhiFile("ThuCung.xml", listTC);
-
-                    MessageBox.Show("Cập nhật thành công!");
-                    LoadData();
-                    btnLamMoi_Click(sender, e);
-                }
-            }
-            catch (Exception ex) { MessageBox.Show("Lỗi: " + ex.Message); }
-        }
-
-        // 6. XÓA (DELETE XML)
+        // ================================
+        // XÓA
+        // ================================
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            if (txtMaTC.Text == "") return;
-
-            if (MessageBox.Show("Xóa thú cưng này?", "Cảnh báo", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (txtMaTC.Text == "")
             {
-                try
-                {
-                    var tc = listTC.FirstOrDefault(x => x.MaThuCung == txtMaTC.Text);
+                MessageBox.Show("Chọn thú cưng cần xóa!");
+                return;
+            }
 
-                    if (tc != null)
-                    {
-                        listTC.Remove(tc);
-                        FileXml.GhiFile("ThuCung.xml", listTC);
+            DataRow[] rows = dsThuCung.Tables["ThuCung"].Select($"MaThuCung='{txtMaTC.Text}'");
 
-                        MessageBox.Show("Đã xóa!");
-                        LoadData();
-                        btnLamMoi_Click(sender, e);
-                    }
-                }
-                catch (Exception ex) { MessageBox.Show("Lỗi: " + ex.Message); }
+            if (rows.Length > 0)
+            {
+                rows[0].Delete();
+                dsThuCung.WriteXml(xmlFilePath);
+                MessageBox.Show("Xóa thành công!");
+                LoadThuCung();
+                LamMoi();
             }
         }
 
-        private void btnLamMoi_Click(object sender, EventArgs e)
+        // ================================
+        // LÀM MỚI
+        // ================================
+        private void btnLamMoi_Click(object sender, EventArgs e) => LamMoi();
+
+        private void LamMoi()
         {
-            txtMaTC.Enabled = true;
             txtMaTC.Clear();
             txtTenTC.Clear();
             txtGiong.Clear();
-            numGiaBan.Value = 0;
+            cboLoai.SelectedIndex = -1;
+            cboGioiTinh.SelectedIndex = -1;
+            cboTrangThai.SelectedIndex = -1;
+            cboNCC.SelectedIndex = -1;
 
-            if (cboLoai.Items.Count > 0) cboLoai.SelectedIndex = 0;
-            if (cboTrangThai.Items.Count > 0) cboTrangThai.SelectedIndex = 0;
+            numGiaNhap.Value = 0;
+            numGiaBan.Value = 0;
+            dtpNgaySinh.Value = DateTime.Now;
 
             txtMaTC.Focus();
         }

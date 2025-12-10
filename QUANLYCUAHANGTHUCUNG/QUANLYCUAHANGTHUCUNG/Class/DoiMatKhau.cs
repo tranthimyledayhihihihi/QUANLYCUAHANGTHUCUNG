@@ -1,23 +1,29 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using QuanLyCuaHangThuCung.GUI;
+using System;
 
-namespace QuanLyThuCung.Class
+namespace QuanLyCuaHangThuCung.Class
 {
-    public class DoiMatKhau
+    class DoiMatKhau
     {
-        public bool LuuMatKhauMoi(string maNV, string matKhauMoi)
-        {
-            List<NhanVien> listNV = FileXml.DocFile<NhanVien>("NhanVien.xml");
+        DangNhap dn = new DangNhap();
 
-            var nv = listNV.FirstOrDefault(x => x.MaNhanVien == maNV);
-            if (nv != null)
-            {
-                nv.MatKhau = matKhauMoi;
-                // Ghi đè lại file XML
-                FileXml.GhiFile("NhanVien.xml", listNV);
-                return true;
-            }
-            return false;
+        /// <summary>
+        /// Kiểm tra mật khẩu cũ có đúng với tài khoản đang đăng nhập hay không.
+        /// </summary>
+        public bool KiemTraMK(string matKhauCu)
+        {
+            // Đọc đúng file Data/TaiKhoan.xml
+            return dn.kiemtraTTDN("TaiKhoan.xml",
+                                  frmMainNew.tenDNMain,
+                                  matKhauCu);
+        }
+
+        /// <summary>
+        /// Đổi mật khẩu sang giá trị mới cho tài khoản hiện tại.
+        /// </summary>
+        public void Doi(string matKhauMoi)
+        {
+            dn.DoiMatKhau(frmMainNew.tenDNMain, matKhauMoi);
         }
     }
 }

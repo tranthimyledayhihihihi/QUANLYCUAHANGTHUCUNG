@@ -1,90 +1,59 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq; // Cần thiết để tìm kiếm trong List
+﻿// File: frmDoiMatKhau.cs
+using System;
 using System.Windows.Forms;
-using QuanLyThuCung.Class; // Namespace chứa FileXml và HeThong
+using QuanLyCuaHangThuCung.Class; // Cần để gọi lớp DoiMatKhau và GlobalVariables
 
 namespace QuanLyCuaHangThuCung.GUI
 {
     public partial class frmDoiMatKhau : Form
     {
+        // Khai báo lớp logic
+        DoiMatKhau dmkh = new DoiMatKhau();
+
         public frmDoiMatKhau()
         {
             InitializeComponent();
         }
 
-        private void frmDoiMatKhau_Load(object sender, EventArgs e)
+        private void btnXacNhan_Click(object sender, EventArgs e)
         {
-            // Kiểm tra xem đã đăng nhập chưa để tránh lỗi
-            if (HeThong.NhanVienDangNhap != null)
-            {
-                lblTaiKhoan.Text = "Tài khoản: " + HeThong.NhanVienDangNhap.MaNhanVien;
-            }
-            else
-            {
-                MessageBox.Show("Chưa đăng nhập!");
-                this.Close();
-            }
-        }
+            string matKhauCu = txtMKCu.Text;
+            string matKhauMoi = txtMKMoi.Text;
+            string xacNhanMK = txtXacNhanMK.Text;
 
-        private void btnLuu_Click(object sender, EventArgs e)
-        {
-            string passOld = txtMatKhauCu.Text.Trim();
-            string passNew = txtMatKhauMoi.Text.Trim();
-            string passConfirm = txtXacNhan.Text.Trim();
-
-            // 1. Kiểm tra nhập thiếu
-            if (passOld == "" || passNew == "" || passConfirm == "")
+            // 1. Kiểm tra đầu vào
+            if (string.IsNullOrEmpty(matKhauCu) || string.IsNullOrEmpty(matKhauMoi) || string.IsNullOrEmpty(xacNhanMK))
             {
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Cảnh báo");
+                MessageBox.Show("Vui lòng nhập đầy đủ Mật khẩu cũ và Mật khẩu mới.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // 2. Kiểm tra mật khẩu xác nhận
-            if (passNew != passConfirm)
+            // 2. Kiểm tra khớp mật khẩu mới
+            if (matKhauMoi != xacNhanMK)
             {
-                MessageBox.Show("Mật khẩu xác nhận không khớp!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Mật khẩu mới và Xác nhận mật khẩu không khớp!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            // 3. Kiểm tra mật khẩu cũ (So sánh với mật khẩu đang lưu trong Hệ thống)
-            if (HeThong.NhanVienDangNhap.MatKhau != passOld)
+            // 3. Kiểm tra Mật khẩu cũ có đúng không (sử dụng KiemTraMK từ DoiMatKhau.cs)
+            if (!dmkh.KiemTraMK(matKhauCu))
             {
-                MessageBox.Show("Mật khẩu cũ không chính xác!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Mật khẩu cũ không đúng. Vui lòng thử lại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtMKCu.Focus();
                 return;
             }
 
             try
             {
-                // 4. Tiến hành cập nhật vào XML
-                // B1: Đọc toàn bộ danh sách nhân viên lên
-                List<NhanVien> listNV = FileXml.DocFile<NhanVien>("NhanVien.xml");
+                // 4. Đổi mật khẩu (sử dụng Doi từ DoiMatKhau.cs)
+                dmkh.Doi(matKhauMoi);
 
-                // B2: Tìm nhân viên đang đăng nhập trong danh sách đó
-                var nv = listNV.FirstOrDefault(x => x.MaNhanVien == HeThong.NhanVienDangNhap.MaNhanVien);
-
-                if (nv != null)
-                {
-                    // B3: Đổi mật khẩu
-                    nv.MatKhau = passNew;
-
-                    // B4: Ghi đè lại file XML
-                    FileXml.GhiFile("NhanVien.xml", listNV);
-
-                    // B5: Cập nhật luôn mật khẩu trong phiên đăng nhập hiện tại
-                    HeThong.NhanVienDangNhap.MatKhau = passNew;
-
-                    MessageBox.Show("Đổi mật khẩu thành công!", "Thông báo");
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Không tìm thấy tài khoản trong dữ liệu gốc!", "Lỗi");
-                }
+                MessageBox.Show("Đổi mật khẩu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi hệ thống: " + ex.Message);
+                MessageBox.Show("Lỗi khi cập nhật mật khẩu: " + ex.Message, "Lỗi Hệ Thống", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -93,21 +62,9 @@ namespace QuanLyCuaHangThuCung.GUI
             this.Close();
         }
 
-        // Checkbox hiển thị mật khẩu
-        private void chkHienMatKhau_CheckedChanged(object sender, EventArgs e)
+        private void pnlContent_Paint(object sender, PaintEventArgs e)
         {
-            if (chkHienMatKhau.Checked)
-            {
-                txtMatKhauCu.PasswordChar = '\0'; // Hiện chữ
-                txtMatKhauMoi.PasswordChar = '\0';
-                txtXacNhan.PasswordChar = '\0';
-            }
-            else
-            {
-                txtMatKhauCu.PasswordChar = '*'; // Hiện dấu sao
-                txtMatKhauMoi.PasswordChar = '*';
-                txtXacNhan.PasswordChar = '*';
-            }
+
         }
     }
 }

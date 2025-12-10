@@ -1,4 +1,4 @@
-﻿namespace QuanLyCuaHangThuCung.GUI
+﻿namespace QuanLyCuaHangThuCung
 {
     partial class frmBaoCao
     {
@@ -7,9 +7,7 @@
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
                 components.Dispose();
-            }
             base.Dispose(disposing);
         }
 
@@ -17,237 +15,235 @@
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
 
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-
-            this.tabControlBaoCao = new System.Windows.Forms.TabControl();
-
-            // --- Tab Doanh Thu ---
-            this.tabDoanhThu = new System.Windows.Forms.TabPage();
-            this.panelTopDoanhThu = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.dtpTuNgay = new System.Windows.Forms.DateTimePicker();
-            this.label2 = new System.Windows.Forms.Label();
-            this.dtpDenNgay = new System.Windows.Forms.DateTimePicker();
-            this.btnXemDoanhThu = new System.Windows.Forms.Button();
-            this.lblTongDoanhThu = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.dgvDoanhThu = new System.Windows.Forms.DataGridView();
+            this.tabDashboard = new System.Windows.Forms.TabPage();
             this.chartDoanhThu = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.grpFilterDate = new System.Windows.Forms.GroupBox();
+            this.btnTKNgay = new System.Windows.Forms.Button();
+            this.dtTo = new System.Windows.Forms.DateTimePicker();
+            this.dtFrom = new System.Windows.Forms.DateTimePicker();
+            this.lblTo = new System.Windows.Forms.Label();
+            this.lblFrom = new System.Windows.Forms.Label();
 
-            // --- Tab Tồn Kho ---
-            this.tabTonKho = new System.Windows.Forms.TabPage();
+            this.grpFilterMonth = new System.Windows.Forms.GroupBox();
+            this.btnTKThang = new System.Windows.Forms.Button();
+            this.cboNam = new System.Windows.Forms.ComboBox();
+            this.cboThang = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.dgvTonKho = new System.Windows.Forms.DataGridView();
+            this.label3 = new System.Windows.Forms.Label();
 
-            // --- Tab Thú Cưng ---
-            this.tabThuCung = new System.Windows.Forms.TabPage();
-            this.dgvThuCung = new System.Windows.Forms.DataGridView();
-            this.chartThuCung = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.grpSummary = new System.Windows.Forms.GroupBox();
+            this.lblThuCungDaBan = new System.Windows.Forms.Label();
+            this.lblSanPhamDaBan = new System.Windows.Forms.Label();
+            this.lblTongDoanhThu = new System.Windows.Forms.Label();
+            this.lblTongHoaDon = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
 
-            this.tabControlBaoCao.SuspendLayout();
-            this.tabDoanhThu.SuspendLayout();
-            this.panelTopDoanhThu.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDoanhThu)).BeginInit();
+            this.tabSanPham = new System.Windows.Forms.TabPage();
+            this.dgvSanPham = new System.Windows.Forms.DataGridView();
+
+            this.tabThuCung = new System.Windows.Forms.TabPage();
+            this.dgvThuCung = new System.Windows.Forms.DataGridView();
+
+            this.tabHoaDon = new System.Windows.Forms.TabPage();
+            this.dgvHoaDon = new System.Windows.Forms.DataGridView();
+            this.btnInHD = new System.Windows.Forms.Button();
+
+            this.tabControl1.SuspendLayout();
+            this.tabDashboard.SuspendLayout();
+
             ((System.ComponentModel.ISupportInitialize)(this.chartDoanhThu)).BeginInit();
-            this.tabTonKho.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvTonKho)).BeginInit();
+            this.grpFilterDate.SuspendLayout();
+            this.grpFilterMonth.SuspendLayout();
+            this.grpSummary.SuspendLayout();
+
+            this.tabSanPham.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSanPham)).BeginInit();
+
             this.tabThuCung.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvThuCung)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartThuCung)).BeginInit();
+
+            this.tabHoaDon.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvHoaDon)).BeginInit();
+
             this.SuspendLayout();
+            // ------------------------------------------------------
+            // TAB CONTROL
+            // ------------------------------------------------------
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.tabControl1.Controls.Add(this.tabDashboard);
+            this.tabControl1.Controls.Add(this.tabSanPham);
+            this.tabControl1.Controls.Add(this.tabThuCung);
+            this.tabControl1.Controls.Add(this.tabHoaDon);
 
-            // 
-            // tabControlBaoCao
-            // 
-            this.tabControlBaoCao.Controls.Add(this.tabDoanhThu);
-            this.tabControlBaoCao.Controls.Add(this.tabTonKho);
-            this.tabControlBaoCao.Controls.Add(this.tabThuCung);
-            this.tabControlBaoCao.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControlBaoCao.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.tabControlBaoCao.Location = new System.Drawing.Point(0, 0);
-            this.tabControlBaoCao.Name = "tabControlBaoCao";
-            this.tabControlBaoCao.SelectedIndex = 0;
-            this.tabControlBaoCao.Size = new System.Drawing.Size(1000, 600);
-            this.tabControlBaoCao.TabIndex = 0;
+            // ====== TÊN TAB ======
+            this.tabDashboard.Text = "📊 Dashboard";
+            this.tabSanPham.Text = "📦 Sản phẩm";
+            this.tabThuCung.Text = "🐾 Thú cưng";
+            this.tabHoaDon.Text = "🧾 Hóa đơn";
 
-            // 
-            // --- SETUP TAB DOANH THU ---
-            // 
-            this.tabDoanhThu.Controls.Add(this.chartDoanhThu);
-            this.tabDoanhThu.Controls.Add(this.dgvDoanhThu);
-            this.tabDoanhThu.Controls.Add(this.panelTopDoanhThu);
-            this.tabDoanhThu.Location = new System.Drawing.Point(4, 29);
-            this.tabDoanhThu.Name = "tabDoanhThu";
-            this.tabDoanhThu.Padding = new System.Windows.Forms.Padding(3);
-            this.tabDoanhThu.Text = "Doanh Thu";
-            this.tabDoanhThu.UseVisualStyleBackColor = true;
+            // ------------------------------------------------------
+            // TAB DASHBOARD
+            // ------------------------------------------------------
+            this.tabDashboard.BackColor = System.Drawing.Color.White;
+            this.tabDashboard.Controls.Add(this.chartDoanhThu);
+            this.tabDashboard.Controls.Add(this.grpFilterDate);
+            this.tabDashboard.Controls.Add(this.grpFilterMonth);
+            this.tabDashboard.Controls.Add(this.grpSummary);
 
-            // Panel Filter
-            this.panelTopDoanhThu.Controls.Add(this.lblTongDoanhThu);
-            this.panelTopDoanhThu.Controls.Add(this.label3);
-            this.panelTopDoanhThu.Controls.Add(this.btnXemDoanhThu);
-            this.panelTopDoanhThu.Controls.Add(this.dtpDenNgay);
-            this.panelTopDoanhThu.Controls.Add(this.label2);
-            this.panelTopDoanhThu.Controls.Add(this.dtpTuNgay);
-            this.panelTopDoanhThu.Controls.Add(this.label1);
-            this.panelTopDoanhThu.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTopDoanhThu.Height = 80;
-            this.panelTopDoanhThu.BackColor = System.Drawing.Color.WhiteSmoke;
+            // BIỂU ĐỒ
+            this.chartDoanhThu.Location = new System.Drawing.Point(10, 260);
+            this.chartDoanhThu.Size = new System.Drawing.Size(980, 360);
+            this.chartDoanhThu.BackColor = System.Drawing.Color.WhiteSmoke;
 
-            this.label1.AutoSize = true; this.label1.Location = new System.Drawing.Point(20, 30); this.label1.Text = "Từ ngày:";
-            this.dtpTuNgay.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpTuNgay.Location = new System.Drawing.Point(100, 27); this.dtpTuNgay.Size = new System.Drawing.Size(120, 26);
+            // GROUP: Filter theo ngày
+            this.grpFilterDate.Text = "Thống kê theo ngày";
+            this.grpFilterDate.Location = new System.Drawing.Point(10, 10);
+            this.grpFilterDate.Size = new System.Drawing.Size(450, 100);
 
-            this.label2.AutoSize = true; this.label2.Location = new System.Drawing.Point(240, 30); this.label2.Text = "Đến ngày:";
-            this.dtpDenNgay.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpDenNgay.Location = new System.Drawing.Point(330, 27); this.dtpDenNgay.Size = new System.Drawing.Size(120, 26);
+            this.lblFrom.Text = "Từ ngày:";
+            this.lblFrom.Location = new System.Drawing.Point(10, 30);
 
-            this.btnXemDoanhThu.Text = "Xem Báo Cáo";
-            this.btnXemDoanhThu.Location = new System.Drawing.Point(470, 25);
-            this.btnXemDoanhThu.Size = new System.Drawing.Size(150, 30);
-            this.btnXemDoanhThu.Click += new System.EventHandler(this.btnXemDoanhThu_Click);
+            this.dtFrom.Location = new System.Drawing.Point(90, 25);
 
-            this.label3.AutoSize = true; this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.label3.Location = new System.Drawing.Point(650, 28); this.label3.Text = "Tổng thu:";
+            this.lblTo.Text = "Đến ngày:";
+            this.lblTo.Location = new System.Drawing.Point(10, 65);
 
-            this.lblTongDoanhThu.AutoSize = true;
-            this.lblTongDoanhThu.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold);
-            this.lblTongDoanhThu.ForeColor = System.Drawing.Color.Red;
-            this.lblTongDoanhThu.Location = new System.Drawing.Point(750, 26);
-            this.lblTongDoanhThu.Text = "0 VNĐ";
+            this.dtTo.Location = new System.Drawing.Point(90, 60);
 
-            // Grid Doanh Thu (Trái)
-            this.dgvDoanhThu.Dock = System.Windows.Forms.DockStyle.Left;
-            this.dgvDoanhThu.Width = 400;
-            this.dgvDoanhThu.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.btnTKNgay.Text = "Thống kê";
+            this.btnTKNgay.Location = new System.Drawing.Point(320, 40);
+            this.btnTKNgay.Click += new System.EventHandler(this.btnTKNgay_Click);
 
-            // Chart Doanh Thu (Phải)
-            chartArea1.Name = "ChartArea1";
-            this.chartDoanhThu.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chartDoanhThu.Legends.Add(legend1);
-            this.chartDoanhThu.Dock = System.Windows.Forms.DockStyle.Fill;
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "DoanhThu";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column; // Biểu đồ Cột
-            this.chartDoanhThu.Series.Add(series1);
-            this.chartDoanhThu.Titles.Add("Biểu đồ doanh thu theo ngày");
+            this.grpFilterDate.Controls.Add(this.lblFrom);
+            this.grpFilterDate.Controls.Add(this.dtFrom);
+            this.grpFilterDate.Controls.Add(this.lblTo);
+            this.grpFilterDate.Controls.Add(this.dtTo);
+            this.grpFilterDate.Controls.Add(this.btnTKNgay);
 
-            // 
-            // --- SETUP TAB TỒN KHO ---
-            // 
-            this.tabTonKho.Controls.Add(this.dgvTonKho);
-            this.tabTonKho.Controls.Add(this.label4);
-            this.tabTonKho.Location = new System.Drawing.Point(4, 29);
-            this.tabTonKho.Name = "tabTonKho";
-            this.tabTonKho.Text = "Cảnh Báo Tồn Kho";
-            this.tabTonKho.UseVisualStyleBackColor = true;
+            // GROUP: Filter tháng
+            this.grpFilterMonth.Text = "Thống kê theo tháng";
+            this.grpFilterMonth.Location = new System.Drawing.Point(480, 10);
+            this.grpFilterMonth.Size = new System.Drawing.Size(450, 100);
 
-            this.label4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label4.Height = 40;
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.label4.ForeColor = System.Drawing.Color.OrangeRed;
-            this.label4.Text = "DANH SÁCH SẢN PHẨM SẮP HẾT HÀNG (<10)";
+            this.label3.Text = "Tháng:";
+            this.label3.Location = new System.Drawing.Point(20, 25);
+            this.cboThang.Location = new System.Drawing.Point(100, 20);
 
-            this.dgvTonKho.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvTonKho.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.label4.Text = "Năm:";
+            this.label4.Location = new System.Drawing.Point(20, 55);
+            this.cboNam.Location = new System.Drawing.Point(100, 50);
 
-            // 
-            // --- SETUP TAB THÚ CƯNG ---
-            // 
-            this.tabThuCung.Controls.Add(this.chartThuCung);
+            this.btnTKThang.Text = "Thống kê";
+            this.btnTKThang.Location = new System.Drawing.Point(320, 35);
+            this.btnTKThang.Click += new System.EventHandler(this.btnTKThang_Click);
+
+            this.grpFilterMonth.Controls.Add(this.label3);
+            this.grpFilterMonth.Controls.Add(this.cboThang);
+            this.grpFilterMonth.Controls.Add(this.label4);
+            this.grpFilterMonth.Controls.Add(this.cboNam);
+            this.grpFilterMonth.Controls.Add(this.btnTKThang);
+
+            // GROUP: Tổng quan
+            this.grpSummary.Text = "Tổng quan";
+            this.grpSummary.Location = new System.Drawing.Point(10, 120);
+            this.grpSummary.Size = new System.Drawing.Size(980, 130);
+
+            this.label5.Text = "Tổng hóa đơn:";
+            this.label5.Location = new System.Drawing.Point(20, 30);
+            this.lblTongHoaDon.Location = new System.Drawing.Point(160, 30);
+
+            this.label6.Text = "Tổng doanh thu:";
+            this.label6.Location = new System.Drawing.Point(20, 70);
+            this.lblTongDoanhThu.Location = new System.Drawing.Point(160, 70);
+
+            this.label7.Text = "Sản phẩm đã bán:";
+            this.label7.Location = new System.Drawing.Point(450, 30);
+            this.lblSanPhamDaBan.Location = new System.Drawing.Point(620, 30);
+
+            this.label8.Text = "Thú cưng đã bán:";
+            this.label8.Location = new System.Drawing.Point(450, 70);
+            this.lblThuCungDaBan.Location = new System.Drawing.Point(620, 70);
+
+            this.grpSummary.Controls.Add(this.label5);
+            this.grpSummary.Controls.Add(this.lblTongHoaDon);
+            this.grpSummary.Controls.Add(this.label6);
+            this.grpSummary.Controls.Add(this.lblTongDoanhThu);
+            this.grpSummary.Controls.Add(this.label7);
+            this.grpSummary.Controls.Add(this.lblSanPhamDaBan);
+            this.grpSummary.Controls.Add(this.label8);
+            this.grpSummary.Controls.Add(this.lblThuCungDaBan);
+
+            // ------------------------------------------------------
+            // TAB SẢN PHẨM
+            // ------------------------------------------------------
+            this.tabSanPham.BackColor = System.Drawing.Color.White;
+            this.dgvSanPham.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabSanPham.Controls.Add(this.dgvSanPham);
+
+            // ------------------------------------------------------
+            // TAB THÚ CƯNG
+            // ------------------------------------------------------
+            this.tabThuCung.BackColor = System.Drawing.Color.White;
+            this.dgvThuCung.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabThuCung.Controls.Add(this.dgvThuCung);
-            this.tabThuCung.Controls.Add(this.label5);
-            this.tabThuCung.Location = new System.Drawing.Point(4, 29);
-            this.tabThuCung.Name = "tabThuCung";
-            this.tabThuCung.Text = "Thống Kê Thú Cưng";
-            this.tabThuCung.UseVisualStyleBackColor = true;
 
-            this.label5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label5.Height = 40;
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.label5.Text = "TÌNH TRẠNG THÚ CƯNG TẠI CỬA HÀNG";
+            // ------------------------------------------------------
+            // TAB HÓA ĐƠN
+            // ------------------------------------------------------
+            this.tabHoaDon.BackColor = System.Drawing.Color.White;
+            this.dgvHoaDon.Dock = System.Windows.Forms.DockStyle.Top;
+            this.dgvHoaDon.Height = 450;
 
-            this.dgvThuCung.Dock = System.Windows.Forms.DockStyle.Left;
-            this.dgvThuCung.Width = 500;
-            this.dgvThuCung.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.btnInHD.Text = "In hóa đơn";
+            this.btnInHD.Location = new System.Drawing.Point(50, 470);
+            this.btnInHD.Click += new System.EventHandler(this.btnInHD_Click);
 
-            // Chart Thú Cưng (Phải)
-            chartArea2.Name = "ChartArea2";
-            this.chartThuCung.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend2";
-            this.chartThuCung.Legends.Add(legend2);
-            this.chartThuCung.Dock = System.Windows.Forms.DockStyle.Fill;
-            series2.ChartArea = "ChartArea2";
-            series2.Legend = "Legend2";
-            series2.Name = "TrangThai";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie; // Biểu đồ Tròn
-            series2.IsValueShownAsLabel = true; // Hiện số %
-            this.chartThuCung.Series.Add(series2);
-            this.chartThuCung.Titles.Add("Tỷ lệ Bán / Tồn");
+            this.tabHoaDon.Controls.Add(this.btnInHD);
+            this.tabHoaDon.Controls.Add(this.dgvHoaDon);
 
-            // 
-            // Form Main
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1000, 600);
-            this.Controls.Add(this.tabControlBaoCao);
-            this.Name = "frmBaoCao";
+            // ------------------------------------------------------
+            // FORM
+            // ------------------------------------------------------
+            this.ClientSize = new System.Drawing.Size(1020, 650);
+            this.Controls.Add(this.tabControl1);
             this.Text = "Báo Cáo Thống Kê";
-            this.Load += new System.EventHandler(this.frmBaoCao_Load);
 
-            this.tabControlBaoCao.ResumeLayout(false);
-            this.tabDoanhThu.ResumeLayout(false);
-            this.panelTopDoanhThu.ResumeLayout(false);
-            this.panelTopDoanhThu.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDoanhThu)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartDoanhThu)).EndInit();
-            this.tabTonKho.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvTonKho)).EndInit();
-            this.tabThuCung.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvThuCung)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartThuCung)).EndInit();
             this.ResumeLayout(false);
         }
 
         #endregion
 
-        // Khai báo biến
-        private System.Windows.Forms.TabControl tabControlBaoCao;
-        private System.Windows.Forms.TabPage tabDoanhThu;
-        private System.Windows.Forms.TabPage tabTonKho;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabDashboard;
+        private System.Windows.Forms.TabPage tabSanPham;
         private System.Windows.Forms.TabPage tabThuCung;
+        private System.Windows.Forms.TabPage tabHoaDon;
 
-        // Tab Doanh Thu
-        private System.Windows.Forms.Panel panelTopDoanhThu;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DateTimePicker dtpTuNgay;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.DateTimePicker dtpDenNgay;
-        private System.Windows.Forms.Button btnXemDoanhThu;
-        private System.Windows.Forms.Label lblTongDoanhThu;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.DataGridView dgvDoanhThu;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartDoanhThu;
+        private System.Windows.Forms.GroupBox grpFilterDate;
+        private System.Windows.Forms.GroupBox grpFilterMonth;
+        private System.Windows.Forms.GroupBox grpSummary;
 
-        // Tab Tồn Kho
-        private System.Windows.Forms.DataGridView dgvTonKho;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lblFrom, lblTo;
+        private System.Windows.Forms.Label lblTongHoaDon, lblTongDoanhThu;
+        private System.Windows.Forms.Label lblSanPhamDaBan, lblThuCungDaBan;
 
-        // Tab Thú Cưng
+        private System.Windows.Forms.Label label3, label4, label5, label6, label7, label8;
+
+        private System.Windows.Forms.ComboBox cboThang, cboNam;
+        private System.Windows.Forms.DateTimePicker dtFrom, dtTo;
+
+        private System.Windows.Forms.Button btnTKNgay, btnTKThang;
+        private System.Windows.Forms.Button btnInHD;
+
+        private System.Windows.Forms.DataGridView dgvSanPham;
         private System.Windows.Forms.DataGridView dgvThuCung;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chartThuCung;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.DataGridView dgvHoaDon;
     }
 }
