@@ -49,7 +49,7 @@
             this.lblTieuDe.Location = new System.Drawing.Point(0, 0);
             this.lblTieuDe.Name = "lblTieuDe";
             this.lblTieuDe.Padding = new System.Windows.Forms.Padding(0, 20, 0, 10);
-            this.lblTieuDe.Size = new System.Drawing.Size(613, 70);
+            this.lblTieuDe.Size = new System.Drawing.Size(1058, 70);
             this.lblTieuDe.TabIndex = 0;
             this.lblTieuDe.Text = "🔑 ĐỔI MẬT KHẨU TÀI KHOẢN";
             this.lblTieuDe.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -65,9 +65,9 @@
             this.pnlContent.Controls.Add(this.lblMKMoi);
             this.pnlContent.Controls.Add(this.txtMKCu);
             this.pnlContent.Controls.Add(this.lblMKCu);
-            this.pnlContent.Location = new System.Drawing.Point(78, 87);
+            this.pnlContent.Location = new System.Drawing.Point(269, 108);
             this.pnlContent.Name = "pnlContent";
-            this.pnlContent.Size = new System.Drawing.Size(420, 300);
+            this.pnlContent.Size = new System.Drawing.Size(637, 300);
             this.pnlContent.TabIndex = 1;
             this.pnlContent.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlContent_Paint);
             // 
@@ -75,7 +75,7 @@
             // 
             this.btnHuy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(247)))), ((int)(((byte)(220)))));
             this.btnHuy.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnHuy.Location = new System.Drawing.Point(220, 220);
+            this.btnHuy.Location = new System.Drawing.Point(367, 220);
             this.btnHuy.Name = "btnHuy";
             this.btnHuy.Size = new System.Drawing.Size(120, 45);
             this.btnHuy.TabIndex = 4;
@@ -88,9 +88,9 @@
             this.btnXacNhan.BackColor = System.Drawing.Color.Teal;
             this.btnXacNhan.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnXacNhan.ForeColor = System.Drawing.Color.White;
-            this.btnXacNhan.Location = new System.Drawing.Point(80, 220);
+            this.btnXacNhan.Location = new System.Drawing.Point(128, 220);
             this.btnXacNhan.Name = "btnXacNhan";
-            this.btnXacNhan.Size = new System.Drawing.Size(120, 45);
+            this.btnXacNhan.Size = new System.Drawing.Size(180, 45);
             this.btnXacNhan.TabIndex = 3;
             this.btnXacNhan.Text = "XÁC NHẬN";
             this.btnXacNhan.UseVisualStyleBackColor = false;
@@ -98,7 +98,7 @@
             // 
             // txtXacNhanMK
             // 
-            this.txtXacNhanMK.Location = new System.Drawing.Point(180, 150);
+            this.txtXacNhanMK.Location = new System.Drawing.Point(327, 150);
             this.txtXacNhanMK.Name = "txtXacNhanMK";
             this.txtXacNhanMK.PasswordChar = '•';
             this.txtXacNhanMK.Size = new System.Drawing.Size(160, 26);
@@ -108,7 +108,7 @@
             // 
             this.lblXacNhanMK.AutoSize = true;
             this.lblXacNhanMK.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblXacNhanMK.Location = new System.Drawing.Point(50, 150);
+            this.lblXacNhanMK.Location = new System.Drawing.Point(123, 150);
             this.lblXacNhanMK.Name = "lblXacNhanMK";
             this.lblXacNhanMK.Size = new System.Drawing.Size(130, 28);
             this.lblXacNhanMK.TabIndex = 5;
@@ -116,7 +116,7 @@
             // 
             // txtMKMoi
             // 
-            this.txtMKMoi.Location = new System.Drawing.Point(180, 100);
+            this.txtMKMoi.Location = new System.Drawing.Point(327, 100);
             this.txtMKMoi.Name = "txtMKMoi";
             this.txtMKMoi.PasswordChar = '•';
             this.txtMKMoi.Size = new System.Drawing.Size(160, 26);
@@ -126,7 +126,7 @@
             // 
             this.lblMKMoi.AutoSize = true;
             this.lblMKMoi.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblMKMoi.Location = new System.Drawing.Point(50, 100);
+            this.lblMKMoi.Location = new System.Drawing.Point(123, 100);
             this.lblMKMoi.Name = "lblMKMoi";
             this.lblMKMoi.Size = new System.Drawing.Size(137, 28);
             this.lblMKMoi.TabIndex = 3;
@@ -134,7 +134,7 @@
             // 
             // txtMKCu
             // 
-            this.txtMKCu.Location = new System.Drawing.Point(180, 50);
+            this.txtMKCu.Location = new System.Drawing.Point(327, 54);
             this.txtMKCu.Name = "txtMKCu";
             this.txtMKCu.PasswordChar = '•';
             this.txtMKCu.Size = new System.Drawing.Size(160, 26);
@@ -144,18 +144,19 @@
             // 
             this.lblMKCu.AutoSize = true;
             this.lblMKCu.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblMKCu.Location = new System.Drawing.Point(50, 50);
+            this.lblMKCu.Location = new System.Drawing.Point(123, 54);
             this.lblMKCu.Name = "lblMKCu";
             this.lblMKCu.Size = new System.Drawing.Size(123, 28);
             this.lblMKCu.TabIndex = 1;
             this.lblMKCu.Text = "Mật khẩu cũ:";
+            this.lblMKCu.Click += new System.EventHandler(this.lblMKCu_Click);
             // 
             // frmDoiMatKhau
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(247)))), ((int)(((byte)(220)))));
-            this.ClientSize = new System.Drawing.Size(613, 420);
+            this.ClientSize = new System.Drawing.Size(1058, 420);
             this.Controls.Add(this.pnlContent);
             this.Controls.Add(this.lblTieuDe);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;

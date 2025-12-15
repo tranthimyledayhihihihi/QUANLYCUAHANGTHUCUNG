@@ -66,5 +66,10 @@ namespace QuanLyCuaHangThuCung.GUI
         {
 
         }
+
+        private void lblMKCu_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

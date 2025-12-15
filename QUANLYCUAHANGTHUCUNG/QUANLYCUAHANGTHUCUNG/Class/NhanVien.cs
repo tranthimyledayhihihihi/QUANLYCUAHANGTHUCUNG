@@ -35,7 +35,7 @@ namespace QuanLyCuaHangThuCung.Class
                 "<Email>" + Email + "</Email>" +
                 "</NhanVien>";
 
-            Fxml.Them("Data\\NhanVien.xml", noiDung);
+            Fxml.Them("NhanVien.xml", noiDung);
         }
 
         // ===================================================
@@ -52,7 +52,7 @@ namespace QuanLyCuaHangThuCung.Class
                 "<SDT>" + SDT + "</SDT>" +
                 "<Email>" + Email + "</Email>";
 
-            Fxml.Sua("Data\\NhanVien.xml", "NhanVien", "MaNhanVien", MaNhanVien, noiDung);
+            Fxml.Sua("NhanVien.xml", "NhanVien", "MaNhanVien", MaNhanVien, noiDung);
         }
 
         // ===================================================

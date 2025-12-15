@@ -43,7 +43,7 @@ namespace QuanLyCuaHangThuCung.Class
                 "</SanPham>";
 
             // Ghi đúng vào Data\SanPham.xml
-            Fxml.Them("Data\\SanPham.xml", noiDung);
+            Fxml.Them("SanPham.xml", noiDung);
         }
 
         // ==========================================================
@@ -61,7 +61,7 @@ namespace QuanLyCuaHangThuCung.Class
                 "<SoLuongTon>" + SoLuongTon + "</SoLuongTon>" +
                 "<MaNCC>" + MaNCC + "</MaNCC>";
 
-            Fxml.Sua("Data\\SanPham.xml", "SanPham", "MaSP", MaSP, noiDung);
+            Fxml.Sua("SanPham.xml", "SanPham", "MaSP", MaSP, noiDung);
         }
 
         // ==========================================================

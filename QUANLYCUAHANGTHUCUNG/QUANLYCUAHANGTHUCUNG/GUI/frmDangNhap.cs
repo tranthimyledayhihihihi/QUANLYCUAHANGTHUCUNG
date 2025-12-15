@@ -24,7 +24,7 @@ namespace QuanLyCuaHangThuCung.GUI
             string user = txtUser.Text.Trim();
             string pass = txtPass.Text.Trim();
 
-            // Kiểm tra trống
+            // 1. Kiểm tra trống
             if (user == "" || pass == "")
             {
                 MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Thông báo",
@@ -32,7 +32,7 @@ namespace QuanLyCuaHangThuCung.GUI
                 return;
             }
 
-            // Kiểm tra trong XML
+            // 2. Kiểm tra đăng nhập trong XML
             bool kq = dn.kiemtraDangNhap(user, pass);
 
             if (!kq)
@@ -44,22 +44,32 @@ namespace QuanLyCuaHangThuCung.GUI
                 return;
             }
 
-            // Lấy thông tin từ XML
+            // 3. LẤY THÔNG TIN NGƯỜI DÙNG TỪ XML
             var info = dn.layThongTinNguoiDung(user);
+            // info.MaNhanVien
+            // info.TenNhanVien
+            // info.Quyen
 
-            // 💥 Không dùng Session nữa — dùng biến static của frmMainNew
+            // 4. GÁN BIẾN STATIC (DÙNG NẾU CẦN)
             frmMainNew.maNVMain = info.MaNhanVien;
             frmMainNew.QuyenMain = info.Quyen;
+
+            // 5. MỞ FORM MAIN
+            frmMainNew main = new frmMainNew();
+
+            // ⭐⭐⭐ DÒNG QUAN TRỌNG NHẤT ⭐⭐⭐
+            main.HienThiThongTinDangNhap(
+                info.TenNhanVien,
+                info.Quyen == 1 ? "Quản lý" : "Nhân viên"
+            );
 
             MessageBox.Show("Đăng nhập thành công!", "Thông báo",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            // Mở form chính
-            frmMainNew main = new frmMainNew();
             main.Show();
-
-            this.Hide(); // ẩn form đăng nhập
+            this.Hide();
         }
+
 
         private void btnThoat_Click(object sender, EventArgs e)
         {
@@ -72,6 +82,11 @@ namespace QuanLyCuaHangThuCung.GUI
         }
 
         private void pnlBody_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void lblPass_Click(object sender, EventArgs e)
         {
 
         }

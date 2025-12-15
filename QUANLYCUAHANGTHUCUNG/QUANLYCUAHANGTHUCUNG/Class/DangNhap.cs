@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -43,27 +44,30 @@ namespace QuanLyCuaHangThuCung.Class
         // ==========================================================
         // LẤY THÔNG TIN NGƯỜI DÙNG (Mã NV + Quyền)
         // ==========================================================
-        public (string MaNhanVien, int Quyen) layThongTinNguoiDung(string maNV)
+        public (string MaNhanVien, string TenNhanVien, int Quyen) layThongTinNguoiDung(string user)
         {
-            if (!System.IO.File.Exists(TaiKhoanPath))
-            {
-                MessageBox.Show("Không tìm thấy file TaiKhoan.xml");
-                return ("", 0);
-            }
+            DataTable dtNV = Fxml.HienThi("NhanVien.xml");
+            DataTable dtTK = Fxml.HienThi("TaiKhoan.xml");
 
-            XmlDocument doc = new XmlDocument();
-            doc.Load(TaiKhoanPath);
+            if (dtNV == null || dtTK == null)
+                return ("", "", 0);
 
-            XmlNode node = doc.SelectSingleNode($"NewDataSet/TaiKhoan[MaNhanVien='{maNV}']");
+            var tk = dtTK.AsEnumerable()
+                         .FirstOrDefault(r => r["MaNhanVien"].ToString() == user);
 
-            if (node == null)
-                return ("", 0);
+            if (tk == null)
+                return ("", "", 0);
 
-            string manv = node["MaNhanVien"]?.InnerText ?? "";
-            int quyen = int.TryParse(node["Quyen"]?.InnerText, out int q) ? q : 0;
+            int quyen = int.Parse(tk["Quyen"].ToString());
 
-            return (manv, quyen);
+            var nv = dtNV.AsEnumerable()
+                         .FirstOrDefault(r => r["MaNhanVien"].ToString() == user);
+
+            string tenNV = nv != null ? nv["TenNhanVien"].ToString() : "";
+
+            return (user, tenNV, quyen);
         }
+
 
 
         // ================================

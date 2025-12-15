@@ -40,7 +40,7 @@ namespace QuanLyCuaHangThuCung.Class
                 "<DiemTichLuy>0</DiemTichLuy>" +
                 "</KhachHang>";
 
-            Fxml.Them("Data\\KhachHang.xml", noiDung);
+            Fxml.Them("KhachHang.xml", noiDung);
         }
 
         // ===========================================
@@ -55,7 +55,7 @@ namespace QuanLyCuaHangThuCung.Class
                 "<DiaChi>" + DiaChi + "</DiaChi>" +
                 "<DiemTichLuy>" + DiemTichLuy.ToString() + "</DiemTichLuy>";
 
-            Fxml.Sua("Data\\KhachHang.xml", "KhachHang", "MaKhachHang", MaKhachHang, noiDung);
+            Fxml.Sua("KhachHang.xml", "KhachHang", "MaKhachHang", MaKhachHang, noiDung);
         }
 
         // ===========================================

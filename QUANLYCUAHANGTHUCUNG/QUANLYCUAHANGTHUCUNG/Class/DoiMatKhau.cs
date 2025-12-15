@@ -1,5 +1,4 @@
 ﻿using QuanLyCuaHangThuCung.GUI;
-using System;
 
 namespace QuanLyCuaHangThuCung.Class
 {
@@ -7,23 +6,27 @@ namespace QuanLyCuaHangThuCung.Class
     {
         DangNhap dn = new DangNhap();
 
-        /// <summary>
-        /// Kiểm tra mật khẩu cũ có đúng với tài khoản đang đăng nhập hay không.
-        /// </summary>
+        // ===================================
+        // KIỂM TRA MẬT KHẨU CŨ
+        // ===================================
         public bool KiemTraMK(string matKhauCu)
         {
-            // Đọc đúng file Data/TaiKhoan.xml
-            return dn.kiemtraTTDN("TaiKhoan.xml",
-                                  frmMainNew.tenDNMain,
-                                  matKhauCu);
+            return dn.kiemtraTTDN(
+                "TaiKhoan.xml",
+                frmMainNew.maNVMain,   // ✅ ĐÚNG
+                matKhauCu
+            );
         }
 
-        /// <summary>
-        /// Đổi mật khẩu sang giá trị mới cho tài khoản hiện tại.
-        /// </summary>
+        // ===================================
+        // ĐỔI MẬT KHẨU
+        // ===================================
         public void Doi(string matKhauMoi)
         {
-            dn.DoiMatKhau(frmMainNew.tenDNMain, matKhauMoi);
+            dn.DoiMatKhau(
+                frmMainNew.maNVMain,   // ✅ ĐÚNG
+                matKhauMoi
+            );
         }
     }
 }

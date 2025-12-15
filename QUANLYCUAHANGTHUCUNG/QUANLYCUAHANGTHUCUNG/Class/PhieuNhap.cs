@@ -49,7 +49,7 @@ namespace QuanLyCuaHangThuCung.Class
                 "</PhieuNhap>";
 
             // Ghi đúng đường dẫn Data\
-            Fxml.Them("Data\\PhieuNhap.xml", noiDung);
+            Fxml.Them("PhieuNhap.xml", noiDung);
 
             // TODO: update kho / thêm thú cưng nếu LoaiMatHang = TC
         }

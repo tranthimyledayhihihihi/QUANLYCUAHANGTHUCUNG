@@ -89,6 +89,7 @@
             this.pnlControls.Name = "pnlControls";
             this.pnlControls.Size = new System.Drawing.Size(1125, 275);
             this.pnlControls.TabIndex = 1;
+            this.pnlControls.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlControls_Paint);
             // 
             // lblMaLichHen
             // 
@@ -129,6 +130,7 @@
             this.cboMaKhachHang.Name = "cboMaKhachHang";
             this.cboMaKhachHang.Size = new System.Drawing.Size(281, 28);
             this.cboMaKhachHang.TabIndex = 3;
+            this.cboMaKhachHang.SelectedIndexChanged += new System.EventHandler(this.cboMaKhachHang_SelectedIndexChanged);
             // 
             // lblMaDichVu
             // 

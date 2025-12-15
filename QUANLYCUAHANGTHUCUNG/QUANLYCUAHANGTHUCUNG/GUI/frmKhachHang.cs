@@ -156,5 +156,10 @@ namespace QuanLyCuaHangThuCung.GUI
                 txtMaKH.ReadOnly = true;
             }
         }
+
+        private void pnlControls_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

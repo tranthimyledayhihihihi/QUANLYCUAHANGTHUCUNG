@@ -1,195 +1,205 @@
-﻿using QuanLyCuaHangThuCung.Class;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using QuanLyCuaHangThuCung.Class;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Printing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
+using System.Xml.Linq;
 
 namespace QuanLyCuaHangThuCung
 {
     public partial class frmBaoCao : Form
     {
         FileXml Fxml = new FileXml();
-
-        SanPham spBLL = new SanPham();
-        ThuCung tcBLL = new ThuCung();
-        HoaDonBLL hdBLL = new HoaDonBLL();
-
-        DataTable dtHD, dtCT, dtSP, dtTC;
+        DataTable dtHD, dtCT;
 
         public frmBaoCao()
         {
             InitializeComponent();
-            LoadAllData();
+            LoadData();
+            LoadComboThangNam();
+            KhoiTaoChart();
         }
 
-        // =====================================================
-        //  LOAD TẤT CẢ DATA
-        // =====================================================
-        private void LoadAllData()
+        // ================= LOAD DATA =================
+        private void LoadData()
         {
-            dtSP = spBLL.LoadTable();
-            dtTC = tcBLL.Load();
             dtHD = Fxml.HienThi("HoaDon.xml");
             dtCT = Fxml.HienThi("ChiTietHoaDon.xml");
-
-            dgvSanPham.DataSource = dtSP;
-            dgvThuCung.DataSource = dtTC;
             dgvHoaDon.DataSource = dtHD;
         }
 
-        // =====================================================
-        //  THỐNG KÊ THEO NGÀY
-        // =====================================================
+        private void LoadComboThangNam()
+        {
+            cboThang.Items.Clear();
+            for (int i = 1; i <= 12; i++) cboThang.Items.Add(i);
+
+            cboNam.Items.Clear();
+            for (int i = DateTime.Now.Year - 5; i <= DateTime.Now.Year; i++)
+                cboNam.Items.Add(i);
+
+            cboThang.SelectedIndex = 0;
+            cboNam.SelectedIndex = cboNam.Items.Count - 1;
+        }
+
+        // ================= CHART INIT =================
+        private void KhoiTaoChart()
+        {
+            chartBaoCao.ChartAreas.Clear();
+            ChartArea area = new ChartArea("MainArea");
+            area.AxisX.MajorGrid.Enabled = false;
+            area.AxisY.MajorGrid.LineColor = Color.LightGray;
+            chartBaoCao.ChartAreas.Add(area);
+        }
+
+        // ================= THỐNG KÊ NGÀY =================
         private void btnTKNgay_Click(object sender, EventArgs e)
         {
             DateTime from = dtFrom.Value.Date;
             DateTime to = dtTo.Value.Date;
 
-            var hdFilter = dtHD.AsEnumerable()
+            var list = dtHD.AsEnumerable()
                 .Where(r =>
                 {
-                    DateTime d = DateTime.Parse(r.Field<string>("NgayLap"));
+                    DateTime d = DateTime.Parse(r["NgayLap"].ToString());
                     return d >= from && d <= to;
                 });
 
-            DoThongKe(hdFilter);
+            DoThongKe(list);
+            VeBieuDoSoSanh_SP_TC();
         }
 
-        // =====================================================
-        //  THỐNG KÊ THEO THÁNG
-        // =====================================================
+        // ================= THỐNG KÊ THÁNG =================
         private void btnTKThang_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(cboThang.Text) || string.IsNullOrEmpty(cboNam.Text))
-            {
-                MessageBox.Show("Hãy chọn tháng và năm!");
-                return;
-            }
-
             int thang = int.Parse(cboThang.Text);
             int nam = int.Parse(cboNam.Text);
 
-            var hdFilter = dtHD.AsEnumerable()
+            var list = dtHD.AsEnumerable()
                 .Where(r =>
                 {
-                    DateTime d = DateTime.Parse(r.Field<string>("NgayLap"));
+                    DateTime d = DateTime.Parse(r["NgayLap"].ToString());
                     return d.Month == thang && d.Year == nam;
                 });
 
-            DoThongKe(hdFilter);
-            VeBieuDoDoanhThuTheoNam(nam);
+            DoThongKe(list);
+            VeBieuDoDuong_DoanhThuTheoNam(nam);
         }
 
-        // =====================================================
-        //  XỬ LÝ TÍNH TOÁN TỔNG HỢP
-        // =====================================================
-        private void DoThongKe(IEnumerable<DataRow> hdFilter)
+        // ================= TÍNH TOÁN =================
+        private void DoThongKe(IEnumerable<DataRow> list)
         {
-            lblTongHoaDon.Text = hdFilter.Count().ToString();
+            lblTongHoaDon.Text = $"🧾 Tổng hóa đơn: {list.Count()}";
 
-            lblTongDoanhThu.Text = hdFilter.Sum(r => r.Field<int>("TongTien"))
-                                           .ToString("#,###");
+            int tong = list.Sum(r => Convert.ToInt32(r["TongTien"]));
+            lblTongDoanhThu.Text = $"💰 Tổng doanh thu: {tong:#,###} VNĐ";
 
-            var listSoHD = hdFilter.Select(r => r.Field<int>("SoHoaDon")).ToList();
+            var soHD = list.Select(r => Convert.ToInt32(r["SoHoaDon"])).ToList();
 
             var ct = dtCT.AsEnumerable()
-                .Where(r => listSoHD.Contains(r.Field<int>("SoHoaDon")));
+                .Where(r => soHD.Contains(Convert.ToInt32(r["SoHoaDon"])));
 
-            lblSanPhamDaBan.Text = ct.Where(r => r.Field<string>("LoaiMatHang") == "SP")
-                                     .Sum(r => r.Field<int>("SoLuong"))
-                                     .ToString();
+            lblSanPhamDaBan.Text =
+                $"📦 Sản phẩm đã bán: {ct.Where(r => r["LoaiMatHang"].ToString() == "SP").Sum(r => Convert.ToInt32(r["SoLuong"]))}";
 
-            lblThuCungDaBan.Text = ct.Where(r => r.Field<string>("LoaiMatHang") == "TC")
-                                     .Count()
-                                     .ToString();
+            lblThuCungDaBan.Text =
+                $"🐾 Thú cưng đã bán: {ct.Where(r => r["LoaiMatHang"].ToString() == "TC").Count()}";
         }
 
-        // =====================================================
-        //  VẼ BIỂU ĐỒ DOANH THU THEO NĂM
-        // =====================================================
-        private void VeBieuDoDoanhThuTheoNam(int nam)
+        // ================= 📈 BIỂU ĐỒ ĐƯỜNG =================
+        private void VeBieuDoDuong_DoanhThuTheoNam(int nam)
         {
-            chartDoanhThu.Series.Clear();
-            chartDoanhThu.Titles.Clear();
+            chartBaoCao.Series.Clear();
+            chartBaoCao.Titles.Clear();
 
-            chartDoanhThu.Titles.Add("Biểu đồ doanh thu năm " + nam);
+            chartBaoCao.Titles.Add($"📈 Doanh thu theo tháng năm {nam}");
 
-            var series = chartDoanhThu.Series.Add("Doanh Thu");
-            series.ChartType =
-                System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
+            Series s = new Series("Doanh thu");
+            s.ChartType = SeriesChartType.Line;
+            s.BorderWidth = 3;
+            s.MarkerStyle = MarkerStyle.Circle;
+            s.MarkerSize = 8;
+            s.IsValueShownAsLabel = true;
+            s.ChartArea = "MainArea";
 
-            for (int thang = 1; thang <= 12; thang++)
+            for (int i = 1; i <= 12; i++)
             {
-                var tong = dtHD.AsEnumerable()
+                int tong = dtHD.AsEnumerable()
                     .Where(r =>
                     {
-                        DateTime d = DateTime.Parse(r.Field<string>("NgayLap"));
-                        return d.Month == thang && d.Year == nam;
+                        DateTime d = DateTime.Parse(r["NgayLap"].ToString());
+                        return d.Month == i && d.Year == nam;
                     })
-                    .Sum(r => r.Field<int>("TongTien"));
+                    .Sum(r => Convert.ToInt32(r["TongTien"]));
 
-                series.Points.AddXY("T" + thang, tong);
+                s.Points.AddXY("T" + i, tong);
             }
+
+            chartBaoCao.Series.Add(s);
         }
 
-        // =====================================================
-        //  IN HÓA ĐƠN
-        // =====================================================
-        PrintDocument printHD = new PrintDocument();
-        DataTable hdPrint, ctPrint;
-
-        private void btnInHD_Click(object sender, EventArgs e)
+        // ================= 📊 SO SÁNH SP vs TC =================
+        private void VeBieuDoSoSanh_SP_TC()
         {
-            hdPrint = dtHD;
-            ctPrint = dtCT;
+            chartBaoCao.Series.Clear();
+            chartBaoCao.Titles.Clear();
 
-            printHD.PrintPage += PrintHD_PrintPage;
-            PrintPreviewDialog dlg = new PrintPreviewDialog();
-            dlg.Document = printHD;
-            dlg.Width = 900;
-            dlg.Height = 700;
-            dlg.ShowDialog();
+            chartBaoCao.Titles.Add("📊 So sánh Sản phẩm & Thú cưng");
+
+            Series s = new Series("Số lượng");
+            s.ChartType = SeriesChartType.Column;
+            s.IsValueShownAsLabel = true;
+            s.ChartArea = "MainArea";
+
+            int sp = dtCT.AsEnumerable()
+                .Where(r => r["LoaiMatHang"].ToString() == "SP")
+                .Sum(r => Convert.ToInt32(r["SoLuong"]));
+
+            int tc = dtCT.AsEnumerable()
+                .Where(r => r["LoaiMatHang"].ToString() == "TC")
+                .Count();
+
+            s.Points.AddXY("Sản phẩm", sp);
+            s.Points.AddXY("Thú cưng", tc);
+
+            chartBaoCao.Series.Add(s);
         }
 
-        private void PrintHD_PrintPage(object sender, PrintPageEventArgs e)
+        // ================= 🧾 XUẤT PDF =================
+        private void btnXuatPDF_Click(object sender, EventArgs e)
         {
-            int y = 30;
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "PDF (*.pdf)|*.pdf";
+            sfd.FileName = "BaoCaoDoanhThu.pdf";
 
-            e.Graphics.DrawString("HÓA ĐƠN BÁN HÀNG",
-                new Font("Arial", 18, FontStyle.Bold), Brushes.Black, 220, y);
+            if (sfd.ShowDialog() != DialogResult.OK) return;
 
-            y += 40;
-            e.Graphics.DrawString($"Ngày in: {DateTime.Now:dd/MM/yyyy}",
-                new Font("Arial", 10), Brushes.Black, 50, y);
+            Document doc = new Document(PageSize.A4);
+            PdfWriter.GetInstance(doc, new FileStream(sfd.FileName, FileMode.Create));
+            doc.Open();
 
-            y += 30;
-            e.Graphics.DrawLine(Pens.Black, 50, y, 750, y);
-            y += 20;
+            var titleFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 18);
+            var normalFont = FontFactory.GetFont(FontFactory.HELVETICA, 11);
 
-            foreach (DataRow hd in hdPrint.Rows)
+            doc.Add(new Paragraph("BÁO CÁO DOANH THU", titleFont)
             {
-                e.Graphics.DrawString("Hóa đơn #" + hd["SoHoaDon"],
-                    new Font("Arial", 12, FontStyle.Bold), Brushes.Black, 50, y);
-                y += 25;
+                Alignment = Element.ALIGN_CENTER
+            });
 
-                e.Graphics.DrawString($"Khách hàng: {hd["MaKhachHang"]}", new Font("Arial", 11), Brushes.Black, 50, y);
-                y += 20;
+            doc.Add(new Paragraph("\nNgày in: " + DateTime.Now.ToString("dd/MM/yyyy"), normalFont));
+            doc.Add(new Paragraph("Tổng doanh thu: " + lblTongDoanhThu.Text, normalFont));
+            doc.Add(new Paragraph("Tổng hóa đơn: " + lblTongHoaDon.Text, normalFont));
 
-                e.Graphics.DrawString($"Nhân viên: {hd["MaNhanVien"]}", new Font("Arial", 11), Brushes.Black, 50, y);
-                y += 20;
+            doc.Close();
 
-                e.Graphics.DrawString($"Ngày lập: {hd["NgayLap"]}", new Font("Arial", 11), Brushes.Black, 50, y);
-                y += 20;
-
-                e.Graphics.DrawString($"Tổng tiền: {hd["TongTien"]}", new Font("Arial", 11, FontStyle.Bold), Brushes.Black, 50, y);
-                y += 30;
-
-                e.Graphics.DrawLine(Pens.Black, 50, y, 750, y);
-                y += 20;
-            }
+            MessageBox.Show("Xuất PDF thành công!", "OK");
         }
+
     }
 }

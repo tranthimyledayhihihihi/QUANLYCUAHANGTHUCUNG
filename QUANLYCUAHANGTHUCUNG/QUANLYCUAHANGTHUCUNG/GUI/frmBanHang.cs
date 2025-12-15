@@ -7,7 +7,8 @@ namespace QuanLyCuaHangThuCung.GUI
 {
     public partial class frmBanHang : Form
     {
-        FileXml Fxml = new FileXml();     // ĐÃ CÓ TRONG DỰ ÁN CỦA BẠN
+        FileXml Fxml = new FileXml();
+        HoaDonBLL hdBLL = new HoaDonBLL();
 
         public frmBanHang()
         {
@@ -23,105 +24,114 @@ namespace QuanLyCuaHangThuCung.GUI
             loadThuCung();
             loadDichVu();
 
-            setupGioHang();
+            setupChiTietHoaDon();
+
+            dtpNgayBan.Value = DateTime.Now;
+            txtTongTien.Text = "0";
         }
 
         // ================================
-        //       LOAD COMBOBOX
+        // LOAD COMBOBOX
         // ================================
         private void loadNhanVien()
         {
-            DataTable dt = Fxml.HienThi("NhanVien.xml");
-
-            cboNhanVien.DataSource = dt;
+            cboNhanVien.DataSource = Fxml.HienThi("NhanVien.xml");
             cboNhanVien.DisplayMember = "TenNhanVien";
             cboNhanVien.ValueMember = "MaNhanVien";
         }
 
         private void loadKhachHang()
         {
-            DataTable dt = Fxml.HienThi("KhachHang.xml");
-
-            cboKhachHang.DataSource = dt;
+            cboKhachHang.DataSource = Fxml.HienThi("KhachHang.xml");
             cboKhachHang.DisplayMember = "TenKhachHang";
             cboKhachHang.ValueMember = "MaKhachHang";
         }
 
         // ================================
-        //       LOAD DỮ LIỆU TABCONTROL
+        // LOAD TAB DỮ LIỆU
         // ================================
         private void loadSanPham()
         {
-            DataTable dt = Fxml.HienThi("SanPham.xml");
-
-            dgvSanPham.DataSource = dt;
+            dgvSanPham.DataSource = Fxml.HienThi("SanPham.xml");
         }
 
         private void loadThuCung()
         {
             DataTable dt = Fxml.HienThi("ThuCung.xml");
-
+            dt.DefaultView.RowFilter = "TrangThai = 'Còn hàng'";
             dgvThuCung.DataSource = dt;
         }
 
         private void loadDichVu()
         {
-            DataTable dt = Fxml.HienThi("DichVu.xml");
-
-            dgvDichVu.DataSource = dt;
+            dgvDichVu.DataSource = Fxml.HienThi("DichVu.xml");
         }
 
         // ================================
-        //     TẠO GIỎ HÀNG MẶC ĐỊNH
+        // CHI TIẾT HÓA ĐƠN
         // ================================
-        private void setupGioHang()
+        private void setupChiTietHoaDon()
         {
             DataTable dt = new DataTable();
-            dt.Columns.Add("MaHang");
-            dt.Columns.Add("TenHang");
-            dt.Columns.Add("SoLuong");
-            dt.Columns.Add("DonGia");
-            dt.Columns.Add("ThanhTien");
+            dt.Columns.Add("MaMatHang");
+            dt.Columns.Add("LoaiMatHang");
+            dt.Columns.Add("TenMatHang");
+            dt.Columns.Add("SoLuong", typeof(int));
+            dt.Columns.Add("DonGia", typeof(decimal));
+            dt.Columns.Add("ThanhTien", typeof(decimal));
 
             dgvGioHang.DataSource = dt;
         }
 
-        //=========================================================
-        //   NÚT "THÊM VÀO GIỎ" → tự động lấy item đúng tab đang chọn
-        //=========================================================
+        // ================================
+        // THÊM MẶT HÀNG
+        // ================================
         private void btnThem_Click(object sender, EventArgs e)
         {
-            DataGridView dgv = null;
+            DataGridView dgv;
+            string loai;
 
             if (tabMatHang.SelectedTab == tabSanPham)
+            {
                 dgv = dgvSanPham;
+                loai = "SP";
+            }
             else if (tabMatHang.SelectedTab == tabThuCung)
+            {
                 dgv = dgvThuCung;
+                loai = "TC";
+            }
             else
+            {
                 dgv = dgvDichVu;
+                loai = "DV";
+            }
 
             if (dgv.CurrentRow == null)
             {
-                MessageBox.Show("Bạn chưa chọn mặt hàng!");
+                MessageBox.Show("Nhân viên chưa chọn mặt hàng!");
                 return;
             }
 
             string ma = dgv.CurrentRow.Cells[0].Value.ToString();
             string ten = dgv.CurrentRow.Cells[1].Value.ToString();
-            int soluong = 1;
-            double dongia = Convert.ToDouble(dgv.CurrentRow.Cells["Gia"].Value);
-            double thanhtien = soluong * dongia;
 
-            DataTable cart = (DataTable)dgvGioHang.DataSource;
+            int soLuong = (loai == "SP") ? 1 : 1;
 
-            cart.Rows.Add(ma, ten, soluong, dongia, thanhtien);
+            decimal donGia =
+                loai == "SP" ? Convert.ToDecimal(dgv.CurrentRow.Cells["DonGiaBan"].Value) :
+                loai == "TC" ? Convert.ToDecimal(dgv.CurrentRow.Cells["GiaBan"].Value) :
+                               Convert.ToDecimal(dgv.CurrentRow.Cells["GiaDV"].Value);
+
+            DataTable cthd = (DataTable)dgvGioHang.DataSource;
+            cthd.Rows.Add(ma, loai, ten, soLuong, donGia, soLuong * donGia);
 
             tinhTongTien();
         }
 
-        //=========================================================
-        //                      XÓA GIỎ
-        //=========================================================
+        // ================================
+        // XÓA DÒNG
+        // ================================
         private void btnXoa_Click(object sender, EventArgs e)
         {
             if (dgvGioHang.CurrentRow != null)
@@ -131,46 +141,66 @@ namespace QuanLyCuaHangThuCung.GUI
             }
         }
 
-        //=========================================================
-        //                  TÍNH TỔNG TIỀN
-        //=========================================================
+        // ================================
+        // TÍNH TỔNG TIỀN
+        // ================================
         private void tinhTongTien()
         {
-            double tong = 0;
-
+            decimal tong = 0;
             foreach (DataGridViewRow row in dgvGioHang.Rows)
             {
                 if (row.Cells["ThanhTien"].Value != null)
-                    tong += Convert.ToDouble(row.Cells["ThanhTien"].Value);
+                    tong += Convert.ToDecimal(row.Cells["ThanhTien"].Value);
             }
-
             txtTongTien.Text = tong.ToString("N0");
         }
 
-        //=========================================================
-        //                  NÚT THANH TOÁN
-        //=========================================================
+        // ================================
+        // LẬP HÓA ĐƠN
+        // ================================
         private void btnThanhToan_Click(object sender, EventArgs e)
         {
             if (dgvGioHang.Rows.Count == 0)
             {
-                MessageBox.Show("Giỏ hàng trống!");
+                MessageBox.Show("Hóa đơn chưa có mặt hàng!");
                 return;
             }
 
-            MessageBox.Show("Thanh toán thành công!", "Hoàn tất");
+            int soHD = hdBLL.ThemHD(
+                cboNhanVien.SelectedValue.ToString(),
+                cboKhachHang.SelectedValue.ToString(),
+                dtpNgayBan.Value.ToString("yyyy-MM-dd"),
+                decimal.Parse(txtTongTien.Text.Replace(",", ""))
+            );
 
-            // Reset giỏ hàng
-            setupGioHang();
+            foreach (DataGridViewRow row in dgvGioHang.Rows)
+            {
+                // ⚠️ BẮT BUỘC – BỎ QUA DÒNG RỖNG CUỐI
+                if (row.IsNewRow) continue;
+
+                // ⚠️ AN TOÀN THÊM
+                if (row.Cells["MaMatHang"].Value == null) continue;
+
+                hdBLL.ThemCTHD(
+                    soHD,
+                    row.Cells["MaMatHang"].Value.ToString(),
+                    row.Cells["LoaiMatHang"].Value.ToString(),
+                    Convert.ToInt32(row.Cells["SoLuong"].Value),
+                    Convert.ToDecimal(row.Cells["DonGia"].Value)
+                );
+            }
+
+
+            MessageBox.Show($"Lập hóa đơn thành công!\nSố HĐ: {soHD}", "Hoàn tất");
+
+            setupChiTietHoaDon();
             txtTongTien.Text = "0";
+
+            loadSanPham();
+            loadThuCung();
         }
 
-        private void pnlMain_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void pnlHeader_Paint(object sender, PaintEventArgs e)
+        private void dgvGioHang_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }

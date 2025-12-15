@@ -30,7 +30,7 @@ namespace QuanLyCuaHangThuCung.Class
                 "</NhaCungCap>";
 
             // Them() hiện đang nhận đường dẫn *thô*, nên truyền luôn kèm Data\
-            Fxml.Them("Data\\NhaCungCap.xml", noiDung);
+            Fxml.Them("NhaCungCap.xml", noiDung);
         }
 
         // 3. Sửa NCC
@@ -45,7 +45,7 @@ namespace QuanLyCuaHangThuCung.Class
                 "<MoTa>" + MoTa + "</MoTa>";
 
             // Sua() cũng đang dùng đường dẫn trực tiếp
-            Fxml.Sua("Data\\NhaCungCap.xml", "NhaCungCap", "MaNCC", MaNCC, noiDung);
+            Fxml.Sua("NhaCungCap.xml", "NhaCungCap", "MaNCC", MaNCC, noiDung);
         }
 
         // 4. Xóa NCC

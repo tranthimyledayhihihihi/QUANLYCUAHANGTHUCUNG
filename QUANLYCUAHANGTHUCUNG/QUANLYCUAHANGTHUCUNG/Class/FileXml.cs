@@ -10,8 +10,11 @@ namespace QuanLyCuaHangThuCung.Class
 {
     class FileXml
     {
-        // ====== CHUỖI KẾT NỐI DATABASE ====== 
-        string Conn = @"Data Source=DESKTOP-7F1S7RF\SQLEXPRESS02;Initial Catalog=QuanLyCuaHangThuCung;Integrated Security=True";
+        // ====== CHUỖI KẾT NỐI DATABASE ======
+        public string Conn =
+            @"Data Source=DESKTOP-7F1S7RF\SQLEXPRESS02;
+              Initial Catalog=QuanLyCuaHangThuCung;
+              Integrated Security=True";
 
         // ====== ĐƯỜNG DẪN THƯ MỤC DATA XML ======
         private string DataPath => Application.StartupPath + "\\Data\\";
@@ -46,18 +49,14 @@ namespace QuanLyCuaHangThuCung.Class
         // ================================================================
         public void TaoXML(string bang)
         {
-            SqlConnection con = new SqlConnection(Conn);
-            con.Open();
-
-            string sql = "SELECT * FROM " + bang;
-            SqlDataAdapter ad = new SqlDataAdapter(sql, con);
-            DataTable dt = new DataTable(bang);
-
-            ad.Fill(dt);
-
-            dt.WriteXml(DataPath + bang + ".xml", XmlWriteMode.WriteSchema);
-
-            con.Close();
+            using (SqlConnection con = new SqlConnection(Conn))
+            {
+                con.Open();
+                SqlDataAdapter ad = new SqlDataAdapter("SELECT * FROM " + bang, con);
+                DataTable dt = new DataTable(bang);
+                ad.Fill(dt);
+                dt.WriteXml(DataPath + bang + ".xml", XmlWriteMode.WriteSchema);
+            }
         }
 
         // ================================================================
@@ -66,16 +65,13 @@ namespace QuanLyCuaHangThuCung.Class
         public void Them(string file, string noiDung)
         {
             string filePath = DataPath + file;
-
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
 
             XmlDocumentFragment frag = doc.CreateDocumentFragment();
             frag.InnerXml = noiDung;
 
-            XmlNode root = doc.DocumentElement;
-            root.AppendChild(frag);
-
+            doc.DocumentElement.AppendChild(frag);
             doc.Save(filePath);
         }
 
@@ -85,11 +81,12 @@ namespace QuanLyCuaHangThuCung.Class
         public void Xoa(string file, string tenNode, string xoaTheoTruong, string giaTri)
         {
             string filePath = DataPath + file;
-
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
 
-            XmlNode node = doc.SelectSingleNode($"NewDataSet/{tenNode}[{xoaTheoTruong}='{giaTri}']");
+            XmlNode node = doc.SelectSingleNode(
+                $"NewDataSet/{tenNode}[{xoaTheoTruong}='{giaTri}']"
+            );
 
             if (node != null)
             {
@@ -108,17 +105,17 @@ namespace QuanLyCuaHangThuCung.Class
         public void Sua(string file, string tenNode, string suaTheoTruong, string giaTri, string noiDung)
         {
             string filePath = DataPath + file;
-
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
 
-            XmlNode oldNode = doc.SelectSingleNode($"NewDataSet/{tenNode}[{suaTheoTruong}='{giaTri}']");
+            XmlNode oldNode = doc.SelectSingleNode(
+                $"NewDataSet/{tenNode}[{suaTheoTruong}='{giaTri}']"
+            );
 
             if (oldNode != null)
             {
                 XmlElement newNode = doc.CreateElement(tenNode);
                 newNode.InnerXml = noiDung;
-
                 doc.DocumentElement.ReplaceChild(newNode, oldNode);
                 doc.Save(filePath);
             }
@@ -129,20 +126,16 @@ namespace QuanLyCuaHangThuCung.Class
         }
 
         // ================================================================
-        // 6. LẤY GIÁ TRỊ TRường B TỪ TRường A
+        // 6. LẤY GIÁ TRỊ TRƯỜNG B TỪ TRƯỜNG A (XML)
         // ================================================================
         public string LayGiaTri(string file, string truongA, string giaTriA, string truongB)
         {
             DataTable dt = HienThi(file);
-
             foreach (DataRow r in dt.Rows)
             {
                 if (r[truongA].ToString().Trim() == giaTriA)
-                {
                     return r[truongB].ToString();
-                }
             }
-
             return "";
         }
 
@@ -152,11 +145,12 @@ namespace QuanLyCuaHangThuCung.Class
         public void DoiMatKhau(string maNhanVien, string matKhau)
         {
             string filePath = DataPath + "TaiKhoan.xml";
-
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
 
-            XmlNode node = doc.SelectSingleNode($"NewDataSet/TaiKhoan[MaNhanVien='{maNhanVien}']");
+            XmlNode node = doc.SelectSingleNode(
+                $"NewDataSet/TaiKhoan[MaNhanVien='{maNhanVien}']"
+            );
 
             if (node != null)
             {
@@ -165,118 +159,53 @@ namespace QuanLyCuaHangThuCung.Class
             }
         }
 
-
-        // ****************************************************************
-        // 8. TỰ ĐỘNG LOẠI BỎ CÁC CỘT IDENTITY
-        // ****************************************************************
-        private string RemoveIdentityColumns(string sql)
+        // ================================================================
+        // 8. THỰC THI SQL (KHÔNG TRẢ KẾT QUẢ)
+        // ================================================================
+        public void ExecuteNonQuery(string sql)
         {
-            string[] identityCols =
+            using (SqlConnection con = new SqlConnection(Conn))
             {
-                "SoHoaDon",  // Hóa đơn
-                "Id",        // Chi tiết hóa đơn
-                "MaPhieu",   // Phiếu nhập
-                "MaLichHen"  // Lịch hẹn
-            };
-
-            foreach (string col in identityCols)
-            {
-                // Nếu INSERT đang cố chèn identity
-                if (sql.Contains(col))
-                {
-                    // Xóa đoạn "col, "
-                    sql = System.Text.RegularExpressions.Regex.Replace(
-                        sql,
-                        $@"\b{col}\b\s*,?", "",
-                        System.Text.RegularExpressions.RegexOptions.IgnoreCase
-                    );
-
-                    // Xóa luôn giá trị tương ứng trong VALUES
-                    sql = System.Text.RegularExpressions.Regex.Replace(
-                        sql,
-                        @"\(\s*([^\)]*)\)",
-                        m =>
-                        {
-                            var parts = m.Groups[1].Value.Split(',');
-                            if (parts.Length > 0)
-                            {
-                                // bỏ phần tử đầu (tương ứng identity)
-                                return "(" + string.Join(",", parts.Skip(1)) + ")";
-                            }
-                            return m.Value;
-                        });
-                }
-            }
-
-            return sql;
-        }
-
-        // ****************************************************************
-        // 9. THỰC THI LỆNH SQL (CÓ LOẠI BỎ IDENTITY)
-        // ****************************************************************
-        public void InsertOrUpDateSQL(string sql)
-        {
-            // Auto xử lý bỏ identity
-            sql = RemoveIdentityColumns(sql);
-
-            SqlConnection con = new SqlConnection(Conn);
-            con.Open();
-
-            SqlCommand cmd = new SqlCommand(sql, con);
-
-            try
-            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand(sql, con);
                 cmd.ExecuteNonQuery();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi SQL: " + ex.Message + "\n\nLệnh chạy:\n" + sql);
-            }
-
-            con.Close();
         }
 
         // ================================================================
-        // 10. KIỂM TRA KẾT NỐI SQL
+        // 9. THỰC THI SQL + TRẢ VỀ 1 GIÁ TRỊ (DÙNG SCOPE_IDENTITY)
         // ================================================================
-        public bool KiemTraKetNoi()
+        public object ExecuteScalar(string sql, SqlTransaction tran = null)
         {
-            try
-            {
-                SqlConnection con = new SqlConnection(Conn);
+            SqlConnection con = tran != null ? tran.Connection : new SqlConnection(Conn);
+            SqlCommand cmd = new SqlCommand(sql, con);
+
+            if (tran != null)
+                cmd.Transaction = tran;
+
+            if (con.State != ConnectionState.Open)
                 con.Open();
+
+            object result = cmd.ExecuteScalar();
+
+            if (tran == null)
                 con.Close();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi kết nối database: " + ex.Message);
-                return false;
-            }
+
+            return result;
         }
 
         // ================================================================
-        // 11. LẤY DATA TỪ SQL
+        // 10. LẤY DATA TỪ SQL
         // ================================================================
         public DataTable LayDuLieuSQL(string sql)
         {
             DataTable dt = new DataTable();
-
-            try
+            using (SqlConnection con = new SqlConnection(Conn))
             {
-                SqlConnection con = new SqlConnection(Conn);
                 con.Open();
-
                 SqlDataAdapter ad = new SqlDataAdapter(sql, con);
                 ad.Fill(dt);
-
-                con.Close();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi SQL: " + ex.Message);
-            }
-
             return dt;
         }
     }

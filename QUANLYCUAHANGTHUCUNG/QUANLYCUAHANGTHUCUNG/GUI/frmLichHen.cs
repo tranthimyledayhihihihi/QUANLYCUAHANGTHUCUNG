@@ -61,10 +61,15 @@ namespace QuanLyCuaHangThuCung.GUI
                         // Tìm tên khách hàng
                         if (dtKH != null)
                         {
-                            DataRow[] khRows = dtKH.Select($"MaKH = '{row["MaKhachHang"]}'");
+                            DataRow[] khRows = dtKH.Select(
+    $"MaKhachHang = '{row["MaKhachHang"]}'"
+);
+
+
                             if (khRows.Length > 0)
                             {
-                                newRow["Tên KH"] = khRows[0]["TenKH"];
+                                newRow["Tên KH"] = khRows[0]["TenKhachHang"];
+
                             }
                         }
 
@@ -116,17 +121,20 @@ namespace QuanLyCuaHangThuCung.GUI
                 if (dtKH != null && dtKH.Rows.Count > 0)
                 {
                     cboMaKhachHang.DisplayMember = "Display";
-                    cboMaKhachHang.ValueMember = "MaKH";
+                    cboMaKhachHang.ValueMember = "MaKhachHang";
+
 
                     DataTable dtKHDisplay = new DataTable();
-                    dtKHDisplay.Columns.Add("MaKH", typeof(string));
+                    dtKHDisplay.Columns.Add("MaKhachHang", typeof(string));
+
                     dtKHDisplay.Columns.Add("Display", typeof(string));
 
                     foreach (DataRow row in dtKH.Rows)
                     {
                         DataRow newRow = dtKHDisplay.NewRow();
-                        newRow["MaKH"] = row["MaKH"];
-                        newRow["Display"] = $"{row["MaKH"]} - {row["TenKH"]}";
+                        newRow["MaKhachHang"] = row["MaKhachHang"];
+                        newRow["Display"] = $"{row["MaKhachHang"]} - {row["TenKhachHang"]}";
+
                         dtKHDisplay.Rows.Add(newRow);
                     }
 
@@ -203,7 +211,8 @@ namespace QuanLyCuaHangThuCung.GUI
                     for (int i = 0; i < cboMaKhachHang.Items.Count; i++)
                     {
                         DataRowView item = (DataRowView)cboMaKhachHang.Items[i];
-                        if (item["MaKH"].ToString() == maKH)
+                        if (item["MaKhachHang"].ToString() == maKH)
+
                         {
                             cboMaKhachHang.SelectedIndex = i;
                             break;
@@ -398,6 +407,16 @@ namespace QuanLyCuaHangThuCung.GUI
         }
 
         private void dgvLichHen_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void pnlControls_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void cboMaKhachHang_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

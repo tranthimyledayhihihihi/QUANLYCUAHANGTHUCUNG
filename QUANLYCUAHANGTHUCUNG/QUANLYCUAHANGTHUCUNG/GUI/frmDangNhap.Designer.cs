@@ -45,7 +45,7 @@
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlHeader.Location = new System.Drawing.Point(0, 0);
             this.pnlHeader.Name = "pnlHeader";
-            this.pnlHeader.Size = new System.Drawing.Size(462, 85);
+            this.pnlHeader.Size = new System.Drawing.Size(678, 85);
             this.pnlHeader.TabIndex = 1;
             this.pnlHeader.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlHeader_Paint);
             // 
@@ -72,7 +72,7 @@
             this.pnlBody.Location = new System.Drawing.Point(0, 85);
             this.pnlBody.Name = "pnlBody";
             this.pnlBody.Padding = new System.Windows.Forms.Padding(20);
-            this.pnlBody.Size = new System.Drawing.Size(462, 289);
+            this.pnlBody.Size = new System.Drawing.Size(678, 289);
             this.pnlBody.TabIndex = 0;
             this.pnlBody.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlBody_Paint);
             // 
@@ -80,7 +80,7 @@
             // 
             this.lblUser.AutoSize = true;
             this.lblUser.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.lblUser.Location = new System.Drawing.Point(40, 30);
+            this.lblUser.Location = new System.Drawing.Point(121, 30);
             this.lblUser.Name = "lblUser";
             this.lblUser.Size = new System.Drawing.Size(148, 30);
             this.lblUser.TabIndex = 0;
@@ -89,7 +89,7 @@
             // txtUser
             // 
             this.txtUser.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.txtUser.Location = new System.Drawing.Point(194, 30);
+            this.txtUser.Location = new System.Drawing.Point(318, 30);
             this.txtUser.Name = "txtUser";
             this.txtUser.Size = new System.Drawing.Size(200, 37);
             this.txtUser.TabIndex = 1;
@@ -98,16 +98,17 @@
             // 
             this.lblPass.AutoSize = true;
             this.lblPass.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.lblPass.Location = new System.Drawing.Point(40, 90);
+            this.lblPass.Location = new System.Drawing.Point(121, 90);
             this.lblPass.Name = "lblPass";
             this.lblPass.Size = new System.Drawing.Size(108, 30);
             this.lblPass.TabIndex = 2;
             this.lblPass.Text = "Mật khẩu:";
+            this.lblPass.Click += new System.EventHandler(this.lblPass_Click);
             // 
             // txtPass
             // 
             this.txtPass.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.txtPass.Location = new System.Drawing.Point(194, 87);
+            this.txtPass.Location = new System.Drawing.Point(318, 90);
             this.txtPass.Name = "txtPass";
             this.txtPass.PasswordChar = '●';
             this.txtPass.Size = new System.Drawing.Size(200, 37);
@@ -117,9 +118,9 @@
             // 
             this.btnDangNhap.BackColor = System.Drawing.Color.White;
             this.btnDangNhap.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.btnDangNhap.Location = new System.Drawing.Point(60, 160);
+            this.btnDangNhap.Location = new System.Drawing.Point(111, 160);
             this.btnDangNhap.Name = "btnDangNhap";
-            this.btnDangNhap.Size = new System.Drawing.Size(130, 40);
+            this.btnDangNhap.Size = new System.Drawing.Size(198, 40);
             this.btnDangNhap.TabIndex = 4;
             this.btnDangNhap.Text = "Đăng nhập";
             this.btnDangNhap.UseVisualStyleBackColor = false;
@@ -129,7 +130,7 @@
             // 
             this.btnThoat.BackColor = System.Drawing.Color.White;
             this.btnThoat.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.btnThoat.Location = new System.Drawing.Point(264, 160);
+            this.btnThoat.Location = new System.Drawing.Point(434, 160);
             this.btnThoat.Name = "btnThoat";
             this.btnThoat.Size = new System.Drawing.Size(130, 40);
             this.btnThoat.TabIndex = 5;
@@ -142,7 +143,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(462, 374);
+            this.ClientSize = new System.Drawing.Size(678, 374);
             this.Controls.Add(this.pnlBody);
             this.Controls.Add(this.pnlHeader);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;

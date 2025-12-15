@@ -283,5 +283,10 @@ namespace QuanLyCuaHangThuCung.GUI
 
             txtMaTC.Focus();
         }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }

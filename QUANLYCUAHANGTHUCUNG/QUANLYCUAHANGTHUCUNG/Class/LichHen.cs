@@ -50,7 +50,7 @@ namespace QuanLyCuaHangThuCung.Class
                 "<TrangThai>" + TrangThai + "</TrangThai>" +
                 "</LichHen>";
 
-            Fxml.Them("Data\\LichHen.xml", noiDung);
+            Fxml.Them("LichHen.xml", noiDung);
         }
 
         // =======================================
@@ -66,7 +66,7 @@ namespace QuanLyCuaHangThuCung.Class
                 "<GioHen>" + GioHen + "</GioHen>" +
                 "<TrangThai>" + TrangThai + "</TrangThai>";
 
-            Fxml.Sua("Data\\LichHen.xml", "LichHen", "MaLichHen", MaLichHen, noiDung);
+            Fxml.Sua("LichHen.xml", "LichHen", "MaLichHen", MaLichHen, noiDung);
         }
 
         // =======================================
