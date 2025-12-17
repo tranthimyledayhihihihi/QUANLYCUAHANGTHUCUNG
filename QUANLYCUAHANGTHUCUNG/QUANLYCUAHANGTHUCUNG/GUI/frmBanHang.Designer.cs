@@ -89,14 +89,14 @@ namespace QuanLyCuaHangThuCung.GUI
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.lblTitle.Location = new System.Drawing.Point(20, 15);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(426, 45);
+            this.lblTitle.Size = new System.Drawing.Size(354, 37);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "LẬP HÓA ĐƠN BÁN HÀNG";
->>>>>>> origin/Trần-Thị-Mỹ
             // 
             // pnlMain
             // 
             this.pnlMain.BackColor = System.Drawing.Color.White;
+            this.pnlMain.BackgroundImage = global::QUANLYCUAHANGTHUCUNG.Properties.Resources.Pastel_paws_and_hearts_pattern_background_for_pets___Premium_Vector;
             this.pnlMain.Controls.Add(this.cboKhachHang);
             this.pnlMain.Controls.Add(this.cboNhanVien);
             this.pnlMain.Controls.Add(this.dtpNgayBan);
@@ -118,21 +118,21 @@ namespace QuanLyCuaHangThuCung.GUI
             // 
             this.cboKhachHang.Location = new System.Drawing.Point(20, 20);
             this.cboKhachHang.Name = "cboKhachHang";
-            this.cboKhachHang.Size = new System.Drawing.Size(220, 28);
+            this.cboKhachHang.Size = new System.Drawing.Size(220, 24);
             this.cboKhachHang.TabIndex = 0;
             // 
             // cboNhanVien
             // 
             this.cboNhanVien.Location = new System.Drawing.Point(260, 20);
             this.cboNhanVien.Name = "cboNhanVien";
-            this.cboNhanVien.Size = new System.Drawing.Size(220, 28);
+            this.cboNhanVien.Size = new System.Drawing.Size(220, 24);
             this.cboNhanVien.TabIndex = 1;
             // 
             // dtpNgayBan
             // 
             this.dtpNgayBan.Location = new System.Drawing.Point(500, 20);
             this.dtpNgayBan.Name = "dtpNgayBan";
-            this.dtpNgayBan.Size = new System.Drawing.Size(200, 26);
+            this.dtpNgayBan.Size = new System.Drawing.Size(200, 22);
             this.dtpNgayBan.TabIndex = 2;
             // 
             // tabMatHang
@@ -149,28 +149,29 @@ namespace QuanLyCuaHangThuCung.GUI
             // tabSanPham
             // 
             this.tabSanPham.Controls.Add(this.dgvSanPham);
-            this.tabSanPham.Location = new System.Drawing.Point(4, 29);
+            this.tabSanPham.Location = new System.Drawing.Point(4, 25);
             this.tabSanPham.Name = "tabSanPham";
-            this.tabSanPham.Size = new System.Drawing.Size(472, 447);
+            this.tabSanPham.Size = new System.Drawing.Size(472, 451);
             this.tabSanPham.TabIndex = 0;
             this.tabSanPham.Text = "Sản phẩm";
             // 
             // dgvSanPham
             // 
+            this.dgvSanPham.BackgroundColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.dgvSanPham.ColumnHeadersHeight = 34;
             this.dgvSanPham.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvSanPham.Location = new System.Drawing.Point(0, 0);
             this.dgvSanPham.Name = "dgvSanPham";
             this.dgvSanPham.RowHeadersWidth = 62;
-            this.dgvSanPham.Size = new System.Drawing.Size(472, 447);
+            this.dgvSanPham.Size = new System.Drawing.Size(472, 451);
             this.dgvSanPham.TabIndex = 0;
             // 
             // tabThuCung
             // 
             this.tabThuCung.Controls.Add(this.dgvThuCung);
-            this.tabThuCung.Location = new System.Drawing.Point(4, 29);
+            this.tabThuCung.Location = new System.Drawing.Point(4, 25);
             this.tabThuCung.Name = "tabThuCung";
-            this.tabThuCung.Size = new System.Drawing.Size(472, 447);
+            this.tabThuCung.Size = new System.Drawing.Size(472, 451);
             this.tabThuCung.TabIndex = 1;
             this.tabThuCung.Text = "Thú cưng";
             // 
@@ -181,15 +182,15 @@ namespace QuanLyCuaHangThuCung.GUI
             this.dgvThuCung.Location = new System.Drawing.Point(0, 0);
             this.dgvThuCung.Name = "dgvThuCung";
             this.dgvThuCung.RowHeadersWidth = 62;
-            this.dgvThuCung.Size = new System.Drawing.Size(472, 447);
+            this.dgvThuCung.Size = new System.Drawing.Size(472, 451);
             this.dgvThuCung.TabIndex = 0;
             // 
             // tabDichVu
             // 
             this.tabDichVu.Controls.Add(this.dgvDichVu);
-            this.tabDichVu.Location = new System.Drawing.Point(4, 29);
+            this.tabDichVu.Location = new System.Drawing.Point(4, 25);
             this.tabDichVu.Name = "tabDichVu";
-            this.tabDichVu.Size = new System.Drawing.Size(472, 447);
+            this.tabDichVu.Size = new System.Drawing.Size(472, 451);
             this.tabDichVu.TabIndex = 2;
             this.tabDichVu.Text = "Dịch vụ";
             // 
@@ -200,7 +201,7 @@ namespace QuanLyCuaHangThuCung.GUI
             this.dgvDichVu.Location = new System.Drawing.Point(0, 0);
             this.dgvDichVu.Name = "dgvDichVu";
             this.dgvDichVu.RowHeadersWidth = 62;
-            this.dgvDichVu.Size = new System.Drawing.Size(472, 447);
+            this.dgvDichVu.Size = new System.Drawing.Size(472, 451);
             this.dgvDichVu.TabIndex = 0;
             // 
             // dgvGioHang
@@ -208,7 +209,7 @@ namespace QuanLyCuaHangThuCung.GUI
             this.dgvGioHang.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvGioHang.BackgroundColor = System.Drawing.Color.White;
             this.dgvGioHang.ColumnHeadersHeight = 34;
-            this.dgvGioHang.Location = new System.Drawing.Point(520, 70);
+            this.dgvGioHang.Location = new System.Drawing.Point(527, 95);
             this.dgvGioHang.Name = "dgvGioHang";
             this.dgvGioHang.RowHeadersWidth = 62;
             this.dgvGioHang.Size = new System.Drawing.Size(550, 319);
@@ -219,7 +220,7 @@ namespace QuanLyCuaHangThuCung.GUI
             // 
             this.btnThem.BackColor = System.Drawing.Color.Teal;
             this.btnThem.ForeColor = System.Drawing.Color.White;
-            this.btnThem.Location = new System.Drawing.Point(520, 395);
+            this.btnThem.Location = new System.Drawing.Point(527, 420);
             this.btnThem.Name = "btnThem";
             this.btnThem.Size = new System.Drawing.Size(150, 40);
             this.btnThem.TabIndex = 5;
@@ -231,7 +232,7 @@ namespace QuanLyCuaHangThuCung.GUI
             // 
             this.btnXoa.BackColor = System.Drawing.Color.Teal;
             this.btnXoa.ForeColor = System.Drawing.Color.White;
-            this.btnXoa.Location = new System.Drawing.Point(694, 395);
+            this.btnXoa.Location = new System.Drawing.Point(701, 420);
             this.btnXoa.Name = "btnXoa";
             this.btnXoa.Size = new System.Drawing.Size(150, 40);
             this.btnXoa.TabIndex = 6;
@@ -243,7 +244,7 @@ namespace QuanLyCuaHangThuCung.GUI
             // 
             this.btnThanhToan.BackColor = System.Drawing.Color.Teal;
             this.btnThanhToan.ForeColor = System.Drawing.Color.White;
-            this.btnThanhToan.Location = new System.Drawing.Point(876, 395);
+            this.btnThanhToan.Location = new System.Drawing.Point(883, 420);
             this.btnThanhToan.Name = "btnThanhToan";
             this.btnThanhToan.Size = new System.Drawing.Size(150, 40);
             this.btnThanhToan.TabIndex = 7;
@@ -253,7 +254,7 @@ namespace QuanLyCuaHangThuCung.GUI
             // 
             // lblTongTien
             // 
-            this.lblTongTien.Location = new System.Drawing.Point(526, 438);
+            this.lblTongTien.Location = new System.Drawing.Point(533, 463);
             this.lblTongTien.Name = "lblTongTien";
             this.lblTongTien.Size = new System.Drawing.Size(100, 30);
             this.lblTongTien.TabIndex = 8;
@@ -261,10 +262,10 @@ namespace QuanLyCuaHangThuCung.GUI
             // 
             // txtTongTien
             // 
-            this.txtTongTien.Location = new System.Drawing.Point(650, 438);
+            this.txtTongTien.Location = new System.Drawing.Point(657, 463);
             this.txtTongTien.Name = "txtTongTien";
             this.txtTongTien.ReadOnly = true;
-            this.txtTongTien.Size = new System.Drawing.Size(250, 26);
+            this.txtTongTien.Size = new System.Drawing.Size(250, 22);
             this.txtTongTien.TabIndex = 9;
             // 
             // frmBanHang

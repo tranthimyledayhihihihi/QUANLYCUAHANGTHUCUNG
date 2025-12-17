@@ -11,7 +11,6 @@ namespace QuanLyCuaHangThuCung.Class
         FileXml Fxml = new FileXml();
 
         // ===============================================
-<<<<<<< HEAD
         // 1) LẤY SỐ HÓA ĐƠN TIẾP THEO
         // ===============================================
         public int LaySoHoaDonTiepTheo()
@@ -134,4 +133,3 @@ namespace QuanLyCuaHangThuCung.Class
         }
     }
 }
->>>>>>> origin/Trần-Thị-Mỹ

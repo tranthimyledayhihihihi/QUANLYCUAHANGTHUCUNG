@@ -43,13 +43,14 @@
             // 
             // lblTieuDe
             // 
+            this.lblTieuDe.BackColor = System.Drawing.Color.Transparent;
             this.lblTieuDe.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblTieuDe.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
-            this.lblTieuDe.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.lblTieuDe.ForeColor = System.Drawing.Color.MediumVioletRed;
             this.lblTieuDe.Location = new System.Drawing.Point(0, 0);
             this.lblTieuDe.Name = "lblTieuDe";
-            this.lblTieuDe.Padding = new System.Windows.Forms.Padding(0, 20, 0, 10);
-            this.lblTieuDe.Size = new System.Drawing.Size(1058, 70);
+            this.lblTieuDe.Padding = new System.Windows.Forms.Padding(0, 16, 0, 8);
+            this.lblTieuDe.Size = new System.Drawing.Size(838, 56);
             this.lblTieuDe.TabIndex = 0;
             this.lblTieuDe.Text = "🔑 ĐỔI MẬT KHẨU TÀI KHOẢN";
             this.lblTieuDe.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -65,9 +66,10 @@
             this.pnlContent.Controls.Add(this.lblMKMoi);
             this.pnlContent.Controls.Add(this.txtMKCu);
             this.pnlContent.Controls.Add(this.lblMKCu);
-            this.pnlContent.Location = new System.Drawing.Point(269, 108);
+            this.pnlContent.Location = new System.Drawing.Point(144, 113);
+            this.pnlContent.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlContent.Name = "pnlContent";
-            this.pnlContent.Size = new System.Drawing.Size(637, 300);
+            this.pnlContent.Size = new System.Drawing.Size(566, 240);
             this.pnlContent.TabIndex = 1;
             this.pnlContent.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlContent_Paint);
             // 
@@ -75,9 +77,10 @@
             // 
             this.btnHuy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(247)))), ((int)(((byte)(220)))));
             this.btnHuy.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnHuy.Location = new System.Drawing.Point(367, 220);
+            this.btnHuy.Location = new System.Drawing.Point(326, 176);
+            this.btnHuy.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnHuy.Name = "btnHuy";
-            this.btnHuy.Size = new System.Drawing.Size(120, 45);
+            this.btnHuy.Size = new System.Drawing.Size(107, 36);
             this.btnHuy.TabIndex = 4;
             this.btnHuy.Text = "HỦY";
             this.btnHuy.UseVisualStyleBackColor = false;
@@ -88,9 +91,10 @@
             this.btnXacNhan.BackColor = System.Drawing.Color.Teal;
             this.btnXacNhan.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnXacNhan.ForeColor = System.Drawing.Color.White;
-            this.btnXacNhan.Location = new System.Drawing.Point(128, 220);
+            this.btnXacNhan.Location = new System.Drawing.Point(114, 176);
+            this.btnXacNhan.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnXacNhan.Name = "btnXacNhan";
-            this.btnXacNhan.Size = new System.Drawing.Size(180, 45);
+            this.btnXacNhan.Size = new System.Drawing.Size(160, 36);
             this.btnXacNhan.TabIndex = 3;
             this.btnXacNhan.Text = "XÁC NHẬN";
             this.btnXacNhan.UseVisualStyleBackColor = false;
@@ -98,68 +102,74 @@
             // 
             // txtXacNhanMK
             // 
-            this.txtXacNhanMK.Location = new System.Drawing.Point(327, 150);
+            this.txtXacNhanMK.Location = new System.Drawing.Point(291, 120);
+            this.txtXacNhanMK.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtXacNhanMK.Name = "txtXacNhanMK";
             this.txtXacNhanMK.PasswordChar = '•';
-            this.txtXacNhanMK.Size = new System.Drawing.Size(160, 26);
+            this.txtXacNhanMK.Size = new System.Drawing.Size(143, 22);
             this.txtXacNhanMK.TabIndex = 2;
             // 
             // lblXacNhanMK
             // 
             this.lblXacNhanMK.AutoSize = true;
             this.lblXacNhanMK.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblXacNhanMK.Location = new System.Drawing.Point(123, 150);
+            this.lblXacNhanMK.Location = new System.Drawing.Point(109, 120);
             this.lblXacNhanMK.Name = "lblXacNhanMK";
-            this.lblXacNhanMK.Size = new System.Drawing.Size(130, 28);
+            this.lblXacNhanMK.Size = new System.Drawing.Size(115, 23);
             this.lblXacNhanMK.TabIndex = 5;
             this.lblXacNhanMK.Text = "Xác nhận MK:";
             // 
             // txtMKMoi
             // 
-            this.txtMKMoi.Location = new System.Drawing.Point(327, 100);
+            this.txtMKMoi.Location = new System.Drawing.Point(291, 80);
+            this.txtMKMoi.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtMKMoi.Name = "txtMKMoi";
             this.txtMKMoi.PasswordChar = '•';
-            this.txtMKMoi.Size = new System.Drawing.Size(160, 26);
+            this.txtMKMoi.Size = new System.Drawing.Size(143, 22);
             this.txtMKMoi.TabIndex = 1;
             // 
             // lblMKMoi
             // 
             this.lblMKMoi.AutoSize = true;
             this.lblMKMoi.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblMKMoi.Location = new System.Drawing.Point(123, 100);
+            this.lblMKMoi.Location = new System.Drawing.Point(109, 80);
             this.lblMKMoi.Name = "lblMKMoi";
-            this.lblMKMoi.Size = new System.Drawing.Size(137, 28);
+            this.lblMKMoi.Size = new System.Drawing.Size(120, 23);
             this.lblMKMoi.TabIndex = 3;
             this.lblMKMoi.Text = "Mật khẩu mới:";
             // 
             // txtMKCu
             // 
-            this.txtMKCu.Location = new System.Drawing.Point(327, 54);
+            this.txtMKCu.Location = new System.Drawing.Point(291, 43);
+            this.txtMKCu.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtMKCu.Name = "txtMKCu";
             this.txtMKCu.PasswordChar = '•';
-            this.txtMKCu.Size = new System.Drawing.Size(160, 26);
+            this.txtMKCu.Size = new System.Drawing.Size(143, 22);
             this.txtMKCu.TabIndex = 0;
             // 
             // lblMKCu
             // 
             this.lblMKCu.AutoSize = true;
             this.lblMKCu.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblMKCu.Location = new System.Drawing.Point(123, 54);
+            this.lblMKCu.Location = new System.Drawing.Point(109, 43);
             this.lblMKCu.Name = "lblMKCu";
-            this.lblMKCu.Size = new System.Drawing.Size(123, 28);
+            this.lblMKCu.Size = new System.Drawing.Size(109, 23);
             this.lblMKCu.TabIndex = 1;
             this.lblMKCu.Text = "Mật khẩu cũ:";
             this.lblMKCu.Click += new System.EventHandler(this.lblMKCu_Click);
             // 
             // frmDoiMatKhau
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(247)))), ((int)(((byte)(220)))));
-            this.ClientSize = new System.Drawing.Size(1058, 420);
+            this.BackgroundImage = global::QUANLYCUAHANGTHUCUNG.Properties.Resources.download__5_;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ClientSize = new System.Drawing.Size(838, 488);
             this.Controls.Add(this.pnlContent);
             this.Controls.Add(this.lblTieuDe);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmDoiMatKhau";

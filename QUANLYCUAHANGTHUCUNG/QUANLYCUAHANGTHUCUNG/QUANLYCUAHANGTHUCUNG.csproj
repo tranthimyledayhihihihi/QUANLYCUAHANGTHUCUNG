@@ -54,6 +54,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class\BaoCaoController.cs" />
+    <Compile Include="Class\BaoCaoPDFService.cs" />
+    <Compile Include="Class\ChamCong.cs" />
     <Compile Include="Class\DangNhap.cs" />
     <Compile Include="Class\DichVu.cs" />
     <Compile Include="Class\DoiMatKhau.cs" />
@@ -80,6 +83,12 @@
     </Compile>
     <Compile Include="GUI\frmBaoCao.Designer.cs">
       <DependentUpon>frmBaoCao.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\frmChamCong.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\frmChamCong.Designer.cs">
+      <DependentUpon>frmChamCong.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\frmDangNhap.cs">
       <SubType>Form</SubType>
@@ -155,6 +164,9 @@
     <EmbeddedResource Include="GUI\frmBaoCao.resx">
       <DependentUpon>frmBaoCao.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmChamCong.resx">
+      <DependentUpon>frmChamCong.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\frmDangNhap.resx">
       <DependentUpon>frmDangNhap.cs</DependentUpon>
     </EmbeddedResource>
@@ -196,6 +208,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -210,6 +223,30 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dog.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cat&amp;dog.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pet%27s.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pêtar.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pastel paws and hearts pattern background for pets _ Premium Vector.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\White copy space sheet with dog looking in the corner, funny wallpaper dog concept image_.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dog-right-side.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\download %285%29.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

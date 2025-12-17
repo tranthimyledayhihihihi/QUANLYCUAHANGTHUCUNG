@@ -63,43 +63,6 @@ namespace QuanLyCuaHangThuCung.Class
             Fxml.Xoa("NhanVien.xml", "NhanVien", "MaNhanVien", MaNhanVien);
         }
 
-        // ===================================================
-        // 5) GHI CHẤM CÔNG
-        // ===================================================
-        public void XacNhanDiLam(string MaNhanVien, int Ngay, int Thang, int Nam)
-        {
-            // Tải file ChamCong.xml từ Data\
-            XmlDocument doc = new XmlDocument();
-            doc.Load(Application.StartupPath + "\\Data\\ChamCong.xml");
-
-            XmlNode root = doc.DocumentElement;
-            XmlDocumentFragment frag = doc.CreateDocumentFragment();
-
-            frag.InnerXml =
-                "<ChamCong>" +
-                "<MaNhanVien>" + MaNhanVien + "</MaNhanVien>" +
-                "<Ngay>" + Ngay + "</Ngay>" +
-                "<Thang>" + Thang + "</Thang>" +
-                "<Nam>" + Nam + "</Nam>" +
-                "</ChamCong>";
-
-            root.AppendChild(frag);
-
-            doc.Save(Application.StartupPath + "\\ChamCong.xml");
-        }
-
-        // ===================================================
-        // 6) KIỂM TRA ĐÃ CHẤM CÔNG NGÀY ĐÓ CHƯA
-        // ===================================================
-        public bool kiemtraNgayThang(string MaNhanVien, int Ngay, int Thang, int Nam)
-        {
-            DataTable dt = Fxml.HienThi("ChamCong.xml");
-
-            dt.DefaultView.RowFilter =
-                $"MaNhanVien='{MaNhanVien}' AND Ngay='{Ngay}' AND Thang='{Thang}' AND Nam='{Nam}'";
-
-            return dt.DefaultView.Count > 0;
-        }
 
         // ===================================================
         // 7) LOAD TOÀN BỘ NHÂN VIÊN

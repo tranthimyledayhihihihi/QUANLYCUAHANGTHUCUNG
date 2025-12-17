@@ -42,41 +42,27 @@
         private void InitializeComponent()
         {
             this.pnlControls = new System.Windows.Forms.Panel();
-            this.dgvNhanVien = new System.Windows.Forms.DataGridView();
-            this.lblTieuDe = new System.Windows.Forms.Label();
             this.lblMaNV = new System.Windows.Forms.Label();
-            this.lblTenNV = new System.Windows.Forms.Label();
-            this.lblNgaySinh = new System.Windows.Forms.Label();
-            this.lblDiaChi = new System.Windows.Forms.Label();
-            this.lblSDT = new System.Windows.Forms.Label();
-            this.lblEmail = new System.Windows.Forms.Label();
             this.txtMaNV = new System.Windows.Forms.TextBox();
+            this.lblTenNV = new System.Windows.Forms.Label();
             this.txtTenNV = new System.Windows.Forms.TextBox();
+            this.lblNgaySinh = new System.Windows.Forms.Label();
             this.dtpNgaySinh = new System.Windows.Forms.DateTimePicker();
+            this.lblDiaChi = new System.Windows.Forms.Label();
             this.txtDiaChi = new System.Windows.Forms.TextBox();
+            this.lblSDT = new System.Windows.Forms.Label();
             this.txtSDT = new System.Windows.Forms.TextBox();
+            this.lblEmail = new System.Windows.Forms.Label();
             this.txtEmail = new System.Windows.Forms.TextBox();
             this.btnThem = new System.Windows.Forms.Button();
             this.btnSua = new System.Windows.Forms.Button();
             this.btnXoa = new System.Windows.Forms.Button();
             this.btnLamMoi = new System.Windows.Forms.Button();
-
+            this.dgvNhanVien = new System.Windows.Forms.DataGridView();
+            this.lblTieuDe = new System.Windows.Forms.Label();
             this.pnlControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvNhanVien)).BeginInit();
             this.SuspendLayout();
-            // 
-            // lblTieuDe
-            // 
-            this.lblTieuDe.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblTieuDe.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
-            this.lblTieuDe.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
-            this.lblTieuDe.Location = new System.Drawing.Point(0, 0);
-            this.lblTieuDe.Name = "lblTieuDe";
-            this.lblTieuDe.Padding = new System.Windows.Forms.Padding(10);
-            this.lblTieuDe.Size = new System.Drawing.Size(1000, 60);
-            this.lblTieuDe.TabIndex = 0;
-            this.lblTieuDe.Text = "👨‍💼 QUẢN LÝ THÔNG TIN NHÂN VIÊN";
-            this.lblTieuDe.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // pnlControls
             // 
@@ -109,7 +95,7 @@
             this.lblMaNV.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblMaNV.Location = new System.Drawing.Point(30, 30);
             this.lblMaNV.Name = "lblMaNV";
-            this.lblMaNV.Size = new System.Drawing.Size(56, 20);
+            this.lblMaNV.Size = new System.Drawing.Size(61, 20);
             this.lblMaNV.TabIndex = 0;
             this.lblMaNV.Text = "Mã NV:";
             // 
@@ -126,7 +112,7 @@
             this.lblTenNV.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblTenNV.Location = new System.Drawing.Point(350, 30);
             this.lblTenNV.Name = "lblTenNV";
-            this.lblTenNV.Size = new System.Drawing.Size(60, 20);
+            this.lblTenNV.Size = new System.Drawing.Size(64, 20);
             this.lblTenNV.TabIndex = 2;
             this.lblTenNV.Text = "Tên NV:";
             // 
@@ -143,7 +129,7 @@
             this.lblNgaySinh.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblNgaySinh.Location = new System.Drawing.Point(30, 70);
             this.lblNgaySinh.Name = "lblNgaySinh";
-            this.lblNgaySinh.Size = new System.Drawing.Size(79, 20);
+            this.lblNgaySinh.Size = new System.Drawing.Size(83, 20);
             this.lblNgaySinh.TabIndex = 4;
             this.lblNgaySinh.Text = "Ngày sinh:";
             // 
@@ -161,7 +147,7 @@
             this.lblDiaChi.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblDiaChi.Location = new System.Drawing.Point(350, 70);
             this.lblDiaChi.Name = "lblDiaChi";
-            this.lblDiaChi.Size = new System.Drawing.Size(58, 20);
+            this.lblDiaChi.Size = new System.Drawing.Size(60, 20);
             this.lblDiaChi.TabIndex = 6;
             this.lblDiaChi.Text = "Địa chỉ:";
             // 
@@ -178,7 +164,7 @@
             this.lblSDT.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblSDT.Location = new System.Drawing.Point(30, 110);
             this.lblSDT.Name = "lblSDT";
-            this.lblSDT.Size = new System.Drawing.Size(38, 20);
+            this.lblSDT.Size = new System.Drawing.Size(41, 20);
             this.lblSDT.TabIndex = 8;
             this.lblSDT.Text = "SĐT:";
             // 
@@ -195,7 +181,7 @@
             this.lblEmail.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblEmail.Location = new System.Drawing.Point(350, 110);
             this.lblEmail.Name = "lblEmail";
-            this.lblEmail.Size = new System.Drawing.Size(49, 20);
+            this.lblEmail.Size = new System.Drawing.Size(51, 20);
             this.lblEmail.TabIndex = 10;
             this.lblEmail.Text = "Email:";
             // 
@@ -277,6 +263,19 @@
             this.dgvNhanVien.TabIndex = 2;
             this.dgvNhanVien.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvNhanVien_CellClick);
             // 
+            // lblTieuDe
+            // 
+            this.lblTieuDe.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblTieuDe.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
+            this.lblTieuDe.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
+            this.lblTieuDe.Location = new System.Drawing.Point(0, 0);
+            this.lblTieuDe.Name = "lblTieuDe";
+            this.lblTieuDe.Padding = new System.Windows.Forms.Padding(10);
+            this.lblTieuDe.Size = new System.Drawing.Size(1000, 60);
+            this.lblTieuDe.TabIndex = 0;
+            this.lblTieuDe.Text = "👨‍💼 QUẢN LÝ THÔNG TIN NHÂN VIÊN";
+            this.lblTieuDe.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // frmNhanVien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -293,6 +292,7 @@
             this.pnlControls.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvNhanVien)).EndInit();
             this.ResumeLayout(false);
+
         }
 
         #endregion

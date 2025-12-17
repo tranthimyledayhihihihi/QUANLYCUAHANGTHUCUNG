@@ -180,26 +180,31 @@ namespace QuanLyCuaHangThuCung
 
             if (sfd.ShowDialog() != DialogResult.OK) return;
 
-            Document doc = new Document(PageSize.A4);
-            PdfWriter.GetInstance(doc, new FileStream(sfd.FileName, FileMode.Create));
-            doc.Open();
+            DateTime from = dtFrom.Value.Date;
+            DateTime to = dtTo.Value.Date;
 
-            var titleFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 18);
-            var normalFont = FontFactory.GetFont(FontFactory.HELVETICA, 11);
+            var list = dtHD.AsEnumerable()
+                .Where(r =>
+                {
+                    DateTime d = DateTime.Parse(r["NgayLap"].ToString());
+                    return d >= from && d <= to;
+                });
 
-            doc.Add(new Paragraph("BÁO CÁO DOANH THU", titleFont)
-            {
-                Alignment = Element.ALIGN_CENTER
-            });
+            DataTable dtLoc = list.Any() ? list.CopyToDataTable() : dtHD.Clone();
 
-            doc.Add(new Paragraph("\nNgày in: " + DateTime.Now.ToString("dd/MM/yyyy"), normalFont));
-            doc.Add(new Paragraph("Tổng doanh thu: " + lblTongDoanhThu.Text, normalFont));
-            doc.Add(new Paragraph("Tổng hóa đơn: " + lblTongHoaDon.Text, normalFont));
-
-            doc.Close();
+            BaoCaoController controller = new BaoCaoController();
+            controller.XuatPDF(
+                sfd.FileName,
+                from,
+                to,
+                dtLoc,
+                dtCT,
+                chartBaoCao
+            );
 
             MessageBox.Show("Xuất PDF thành công!", "OK");
         }
+
 
     }
 }

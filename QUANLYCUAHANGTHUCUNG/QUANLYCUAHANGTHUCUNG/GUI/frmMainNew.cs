@@ -29,7 +29,10 @@ namespace QuanLyCuaHangThuCung.GUI
             pnlMain.Controls.Clear();
             frm.TopLevel = false;
             frm.FormBorderStyle = FormBorderStyle.None;
+
+            // Cho form lấp đầy panel nhưng sẽ bị cản lại bởi Padding của panel
             frm.Dock = DockStyle.Fill;
+
             pnlMain.Controls.Add(frm);
             frm.Show();
         }
@@ -46,7 +49,7 @@ namespace QuanLyCuaHangThuCung.GUI
 
             // ===== QUẢN LÝ =====
             mnuNhanVien.Click += (s, e) => LoadForm(new frmNhanVien());
-            mnuChamCong.Click += (s, e) => LoadForm(new frmNhanVien()); // nếu có frmChamCong thì đổi
+            mnuChamCong.Click += (s, e) => LoadForm(new frmChamCong()); // nếu có frmChamCong thì đổi
             mnuKhachHang.Click += (s, e) => LoadForm(new frmKhachHang());
 
             // ===== SẢN PHẨM – DỊCH VỤ =====
@@ -83,6 +86,21 @@ namespace QuanLyCuaHangThuCung.GUI
         }
 
         private void lblWelcome_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void mnuChamCong_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblTenNV_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void frmMainNew_Load_1(object sender, EventArgs e)
         {
 
         }
