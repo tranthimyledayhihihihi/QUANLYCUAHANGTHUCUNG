@@ -1,6 +1,7 @@
 ﻿using System.Xml;
 using System.Data;
 using System.Windows.Forms;
+using System.IO;
 
 namespace QuanLyCuaHangThuCung.Class
 {
@@ -13,18 +14,16 @@ namespace QuanLyCuaHangThuCung.Class
         {
             string filePath = Application.StartupPath + "\\Data\\DichVu.xml";
 
-            if (!System.IO.File.Exists(filePath))
+            if (!File.Exists(filePath))
             {
-                MessageBox.Show("Không tìm thấy file DichVu.xml!");
                 return false;
             }
 
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
 
-            XmlNode node = doc.SelectSingleNode(
-                $"NewDataSet/DichVu[MaDV='{MaDV}']"
-            );
+            // Sử dụng SelectSingleNode để tìm mã dịch vụ tương ứng với MaDV trong SQL
+            XmlNode node = doc.SelectSingleNode($"NewDataSet/DichVu[MaDV='{MaDV}']");
 
             return node != null;
         }
@@ -32,6 +31,7 @@ namespace QuanLyCuaHangThuCung.Class
         // 2. Thêm Dịch Vụ mới
         public void themDV(string MaDV, string TenDV, int GiaDV, int ThoiGianThucHien)
         {
+            // Các trường dữ liệu khớp hoàn toàn với bảng DichVu trong SQL
             string noiDung = "<DichVu>" +
                     "<MaDV>" + MaDV + "</MaDV>" +
                     "<TenDV>" + TenDV + "</TenDV>" +
@@ -51,6 +51,7 @@ namespace QuanLyCuaHangThuCung.Class
                     "<GiaDV>" + GiaDV + "</GiaDV>" +
                     "<ThoiGianThucHien>" + ThoiGianThucHien + "</ThoiGianThucHien>";
 
+            // Cập nhật dựa trên khóa chính MaDV
             Fxml.Sua("DichVu.xml", "DichVu", "MaDV", MaDV, noiDung);
         }
 
@@ -60,7 +61,7 @@ namespace QuanLyCuaHangThuCung.Class
             Fxml.Xoa("DichVu.xml", "DichVu", "MaDV", MaDV);
         }
 
-        // 5. Load vào bảng
+        // 5. Hiển thị danh sách dịch vụ
         public DataTable LoadTable()
         {
             return Fxml.HienThi("DichVu.xml");

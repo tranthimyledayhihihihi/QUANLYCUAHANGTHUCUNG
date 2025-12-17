@@ -10,7 +10,6 @@ namespace QuanLyCuaHangThuCung.GUI
     {
         NhanVien nvBLL = new NhanVien();
         FileXml Fxml = new FileXml();
-
         public frmNhanVien()
         {
             InitializeComponent();
@@ -122,14 +121,17 @@ namespace QuanLyCuaHangThuCung.GUI
             }
         }
 
-        // Nút Thêm
+   
+        // Nút Thêm (Add Employee)
         private void btnThem_Click(object sender, EventArgs e)
         {
             try
             {
-                // Validate dữ liệu
-                if (!ValidateInput())
-                    return;
+                // Kiểm tra quyền quản lý trước khi thực hiện (Check Admin Role)
+                if (!nvBLL.KiemTraQuyenQuanLy()) return; // Chỉ cho phép admin thêm nhân viên
+
+                // Validate dữ liệu và thực hiện thao tác thêm nhân viên
+                if (!ValidateInput()) return;
 
                 string maNV = txtMaNV.Text.Trim();
                 string tenNV = txtTenNV.Text.Trim();
@@ -141,48 +143,51 @@ namespace QuanLyCuaHangThuCung.GUI
                 // Kiểm tra mã nhân viên đã tồn tại
                 if (nvBLL.kiemtra(maNV))
                 {
-                    MessageBox.Show("Mã nhân viên đã tồn tại!", "Cảnh báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Mã nhân viên đã tồn tại!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     txtMaNV.Focus();
                     return;
                 }
 
                 // Kiểm tra tuổi (phải từ 18 tuổi trở lên)
                 int tuoi = DateTime.Now.Year - dtpNgaySinh.Value.Year;
-                if (DateTime.Now < dtpNgaySinh.Value.AddYears(tuoi))
-                    tuoi--;
+                if (DateTime.Now < dtpNgaySinh.Value.AddYears(tuoi)) tuoi--;
 
                 if (tuoi < 18)
                 {
-                    MessageBox.Show("Nhân viên phải từ 18 tuổi trở lên!", "Cảnh báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Nhân viên phải từ 18 tuổi trở lên!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
                 // Thêm nhân viên
                 nvBLL.themNV(maNV, tenNV, ngaySinh, diaChi, sdt, email);
-
-                MessageBox.Show("Thêm nhân viên thành công!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Thêm nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 LoadData();
                 LamMoi();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi thêm nhân viên: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi khi thêm nhân viên: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
+
+
+        // Nút Sửa
         // Nút Sửa
         private void btnSua_Click(object sender, EventArgs e)
         {
             try
             {
-                // Validate dữ liệu
-                if (!ValidateInput())
+                // Kiểm tra quyền quản lý trước khi thực hiện
+                if (!nvBLL.KiemTraQuyenQuanLy())
+                {
+                    MessageBox.Show("Bạn không có quyền thực hiện thao tác này!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
+                }
+
+                // Validate dữ liệu
+                if (!ValidateInput()) return;
 
                 string maNV = txtMaNV.Text.Trim();
                 string tenNV = txtTenNV.Text.Trim();
@@ -194,89 +199,86 @@ namespace QuanLyCuaHangThuCung.GUI
                 // Kiểm tra mã nhân viên có tồn tại không
                 if (!nvBLL.kiemtra(maNV))
                 {
-                    MessageBox.Show("Mã nhân viên không tồn tại!", "Cảnh báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Mã nhân viên không tồn tại!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // Kiểm tra tuổi
+                // Kiểm tra tuổi (phải từ 18 tuổi trở lên)
                 int tuoi = DateTime.Now.Year - dtpNgaySinh.Value.Year;
-                if (DateTime.Now < dtpNgaySinh.Value.AddYears(tuoi))
-                    tuoi--;
+                if (DateTime.Now < dtpNgaySinh.Value.AddYears(tuoi)) tuoi--;
 
                 if (tuoi < 18)
                 {
-                    MessageBox.Show("Nhân viên phải từ 18 tuổi trở lên!", "Cảnh báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Nhân viên phải từ 18 tuổi trở lên!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                DialogResult result = MessageBox.Show(
-                    "Bạn có chắc muốn sửa thông tin nhân viên này?",
-                    "Xác nhận",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question);
+                // Hiển thị hộp thoại xác nhận sửa thông tin
+                DialogResult result = MessageBox.Show("Bạn có chắc muốn sửa thông tin nhân viên này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
                 {
+                    // Sửa thông tin nhân viên
                     nvBLL.suaNV(maNV, tenNV, ngaySinh, diaChi, sdt, email);
+                    MessageBox.Show("Sửa thông tin nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    MessageBox.Show("Sửa thông tin nhân viên thành công!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                    // Load lại dữ liệu
                     LoadData();
                     LamMoi();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi sửa nhân viên: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi khi sửa nhân viên: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
+        // Nút Xóa
         // Nút Xóa
         private void btnXoa_Click(object sender, EventArgs e)
         {
             try
             {
+                // Kiểm tra quyền quản lý trước khi thực hiện
+                if (!nvBLL.KiemTraQuyenQuanLy())
+                {
+                    MessageBox.Show("Bạn không có quyền thực hiện thao tác này!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Kiểm tra mã nhân viên có được chọn không
                 if (string.IsNullOrEmpty(txtMaNV.Text.Trim()))
                 {
-                    MessageBox.Show("Vui lòng chọn nhân viên cần xóa!", "Cảnh báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Vui lòng chọn nhân viên cần xóa!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
                 string maNV = txtMaNV.Text.Trim();
 
+                // Kiểm tra mã nhân viên có tồn tại không
                 if (!nvBLL.kiemtra(maNV))
                 {
-                    MessageBox.Show("Mã nhân viên không tồn tại!", "Cảnh báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Mã nhân viên không tồn tại!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                DialogResult result = MessageBox.Show(
-                    "Bạn có chắc muốn xóa nhân viên này?\nLưu ý: Dữ liệu chấm công liên quan sẽ không bị xóa.",
-                    "Xác nhận xóa",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Warning);
+                // Hiển thị hộp thoại xác nhận xóa nhân viên
+                DialogResult result = MessageBox.Show("Bạn có chắc muốn xóa nhân viên này?\nLưu ý: Dữ liệu chấm công liên quan sẽ không bị xóa.", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                 if (result == DialogResult.Yes)
                 {
+                    // Xóa nhân viên
                     nvBLL.xoaNV(maNV);
+                    MessageBox.Show("Xóa nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    MessageBox.Show("Xóa nhân viên thành công!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                    // Load lại dữ liệu
                     LoadData();
                     LamMoi();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi xóa nhân viên: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi khi xóa nhân viên: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -367,6 +369,11 @@ namespace QuanLyCuaHangThuCung.GUI
             }
 
             return true;
+        }
+
+        private void pnlControls_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

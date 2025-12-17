@@ -14,6 +14,12 @@ namespace QuanLyCuaHangThuCung.GUI
     public partial class frmChamCong : Form
     {
         FileXml Fxml = new FileXml();
+
+        public frmChamCong()
+        {
+            InitializeComponent();
+        }
+
         private void frmChamCong_Load(object sender, EventArgs e)
         {
             dtpNgayChamCong.ValueChanged += dtpNgayChamCong_ValueChanged;
@@ -22,15 +28,9 @@ namespace QuanLyCuaHangThuCung.GUI
             LoadChamCong();
         }
 
-        public frmChamCong()
-        {
-            InitializeComponent();
-        }
-
         void LoadNhanVien()
         {
             DataTable dt = Fxml.HienThi("NhanVien.xml");
-
             cboNhanVien.DataSource = dt;
             cboNhanVien.DisplayMember = "TenNhanVien";
             cboNhanVien.ValueMember = "MaNhanVien";
@@ -38,40 +38,22 @@ namespace QuanLyCuaHangThuCung.GUI
 
         void LoadChamCong()
         {
+            // Lấy toàn bộ dữ liệu từ XML
             DataTable dt = Fxml.HienThi("ChamCong.xml");
 
+            // Lấy ngày đang chọn trên giao diện
             DateTime ngayChon = dtpNgayChamCong.Value;
 
+            // Lọc dữ liệu theo Ngày, Tháng, Năm (Khớp với cấu trúc SQL)
             dt.DefaultView.RowFilter =
                 $"Ngay = {ngayChon.Day} AND Thang = {ngayChon.Month} AND Nam = {ngayChon.Year}";
 
-            DataTable dtView = dt.DefaultView.ToTable();
+            // Hiển thị kết quả lên GridView
+            dgvChamCong.DataSource = dt.DefaultView.ToTable();
 
-            if (!dtView.Columns.Contains("TrangThai"))
-                dtView.Columns.Add("TrangThai");
-
-            foreach (DataRow row in dtView.Rows)
-            {
-                if (row["GioChamCong"] != DBNull.Value)
-                {
-                    TimeSpan gioCham = TimeSpan.Parse(row["GioChamCong"].ToString());
-                    TimeSpan gioQD = new TimeSpan(8, 0, 0);
-
-                    row["TrangThai"] = gioCham > gioQD ? "Trễ" : "Đúng giờ";
-                }
-            }
-
-            dgvChamCong.DataSource = dtView;
-
-            // 🔴 Tô đỏ nhân viên chấm công trễ
-            foreach (DataGridViewRow row in dgvChamCong.Rows)
-            {
-                if (row.Cells["TrangThai"].Value?.ToString() == "Trễ")
-                {
-                    row.Cells["MaNhanVien"].Style.ForeColor = Color.Red;
-                    row.Cells["TrangThai"].Style.ForeColor = Color.Red;
-                }
-            }
+            // Tùy chỉnh hiển thị cột nếu cần (ẩn cột ID tự tăng nếu muốn scannable hơn)
+            if (dgvChamCong.Columns.Contains("Id"))
+                dgvChamCong.Columns["Id"].Visible = false;
         }
 
         private void btnLamMoi_Click(object sender, EventArgs e)
@@ -81,18 +63,15 @@ namespace QuanLyCuaHangThuCung.GUI
 
         private void btnChamCong_Click(object sender, EventArgs e)
         {
+            if (cboNhanVien.SelectedValue == null) return;
+
             string maNV = cboNhanVien.SelectedValue.ToString();
             DateTime ngayCham = dtpNgayChamCong.Value.Date;
             DateTime homNay = DateTime.Today;
 
-            // ❌ Không cho chấm công ngày quá khứ
-            if (ngayCham < homNay)
+            if (ngayCham > homNay)
             {
-                MessageBox.Show(
-                    $"Không thể chấm công ngày {ngayCham:dd/MM/yyyy}",
-                    "Lỗi chấm công",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show("Không thể chấm công ngày trong tương lai!");
                 return;
             }
 
@@ -109,22 +88,23 @@ namespace QuanLyCuaHangThuCung.GUI
 
             ChamCong cc = new ChamCong();
 
+            // Kiểm tra trùng lặp
             if (cc.kiemtraNgayThang(maNV, ngayCham.Day, ngayCham.Month, ngayCham.Year))
             {
-                MessageBox.Show("Nhân viên đã chấm công ngày này!");
+                MessageBox.Show("Nhân viên này đã được xác nhận đi làm ngày hôm nay!");
                 return;
             }
 
+            // Xác nhận đi làm (Hàm này đã được bỏ GioChamCong ở bước trước)
             cc.XacNhanDiLam(maNV, ngayCham.Day, ngayCham.Month, ngayCham.Year);
 
             LoadChamCong();
-            MessageBox.Show("Chấm công thành công!");
+            MessageBox.Show("Xác nhận đi làm thành công!");
         }
 
         private void dtpNgayChamCong_ValueChanged(object sender, EventArgs e)
         {
             LoadChamCong();
         }
-
     }
 }

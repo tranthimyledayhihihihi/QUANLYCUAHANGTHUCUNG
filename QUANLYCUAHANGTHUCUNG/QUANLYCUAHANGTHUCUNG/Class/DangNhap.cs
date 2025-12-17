@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
+using System.IO;
 
 namespace QuanLyCuaHangThuCung.Class
 {
@@ -10,157 +11,185 @@ namespace QuanLyCuaHangThuCung.Class
     {
         FileXml Fxml = new FileXml();
 
-        // ===== ĐƯỜNG DẪN FILE XML =====
+        // Đường dẫn đến file dữ liệu tài khoản
         private string TaiKhoanPath => Application.StartupPath + "\\Data\\TaiKhoan.xml";
 
-
-        // =============================
-        // LẤY MÃ QUYỀN (CHƯA DÙNG)
-        // =============================
-        public void layMaQuyen()
-        {
-            if (!System.IO.File.Exists(TaiKhoanPath))
-            {
-                MessageBox.Show("Không tìm thấy TaiKhoan.xml");
-                return;
-            }
-
-            XmlDocument doc = new XmlDocument();
-            doc.Load(TaiKhoanPath);
-
-            XmlNode nodeMQ = doc.SelectSingleNode("NewDataSet/TaiKhoan/Quyen");
-        }
-
-
-        // ==================================
-        // KIỂM TRA ĐĂNG NHẬP (gọi từ Form)
-        // ==================================
+        // ==========================================================
+        // 1) KIỂM TRA ĐĂNG NHẬP (Kết quả: Đúng/Sai)
+        // ==========================================================
         public bool kiemtraDangNhap(string MaNhanVien, string MatKhau)
         {
-            return kiemtraTTDN("TaiKhoan.xml", MaNhanVien, MatKhau);
+            DataTable dt = Fxml.HienThi("TaiKhoan.xml");
+
+            if (dt == null || dt.Columns.Count == 0)
+            {
+                return false;
+            }
+
+            // Trim input trước khi kiểm tra (xử lý khoảng trắng từ TextBox)
+            string maNV = MaNhanVien?.Trim() ?? "";
+            string matKhau = MatKhau?.Trim() ?? "";
+
+            // SỬ DỤNG LINQ để so sánh
+            var result = dt.AsEnumerable().FirstOrDefault(row =>
+            {
+                string maNVXml = row["MaNhanVien"]?.ToString()?.Trim() ?? "";
+                string matKhauXml = row["MatKhau"]?.ToString()?.Trim() ?? "";
+
+                return maNVXml == maNV && matKhauXml == matKhau;
+            });
+
+            return result != null;
         }
 
-
         // ==========================================================
-        // LẤY THÔNG TIN NGƯỜI DÙNG (Mã NV + Quyền)
+        // 2) LẤY THÔNG TIN NGƯỜI DÙNG (Để phân quyền GUI)
+        // Trả về: Mã NV, Tên NV, và Quyền (1 hoặc 0)
         // ==========================================================
         public (string MaNhanVien, string TenNhanVien, int Quyen) layThongTinNguoiDung(string user)
         {
             DataTable dtNV = Fxml.HienThi("NhanVien.xml");
             DataTable dtTK = Fxml.HienThi("TaiKhoan.xml");
 
-            if (dtNV == null || dtTK == null)
-                return ("", "", 0);
+            if (dtNV == null || dtTK == null) return ("", "", 0);
 
-            var tk = dtTK.AsEnumerable()
-                         .FirstOrDefault(r => r["MaNhanVien"].ToString() == user);
+            string maNV = user?.Trim() ?? "";
 
-            if (tk == null)
-                return ("", "", 0);
+            // Tìm thông tin tài khoản để lấy Quyền
+            DataRow tk = dtTK.AsEnumerable().FirstOrDefault(r =>
+                (r["MaNhanVien"]?.ToString()?.Trim() ?? "") == maNV);
+            if (tk == null) return ("", "", 0);
 
-            int quyen = int.Parse(tk["Quyen"].ToString());
+            int quyen = 0;
+            int.TryParse(tk["Quyen"].ToString(), out quyen);
 
-            var nv = dtNV.AsEnumerable()
-                         .FirstOrDefault(r => r["MaNhanVien"].ToString() == user);
+            // Tìm thông tin nhân viên để lấy Tên hiển thị
+            DataRow nv = dtNV.AsEnumerable().FirstOrDefault(r =>
+                (r["MaNhanVien"]?.ToString()?.Trim() ?? "") == maNV);
+            string tenNV = nv != null ? (nv["TenNhanVien"]?.ToString()?.Trim() ?? "N/A") : "N/A";
 
-            string tenNV = nv != null ? nv["TenNhanVien"].ToString() : "";
-
-            return (user, tenNV, quyen);
+            return (maNV, tenNV, quyen);
         }
 
+        // ==========================================================
+        // 3) QUẢN LÝ TÀI KHOẢN (Chỉ dành cho Admin gọi)
+        // ==========================================================
 
-
-        // ================================
-        // ĐĂNG KÝ TÀI KHOẢN
-        // ================================
+        // Thêm tài khoản mới
         public void dangkiTaiKhoan(string MaNhanVien, string MatKhau, int Quyen)
         {
+            // QUAN TRỌNG: Trim trước khi lưu vào XML
+            string maNV = MaNhanVien?.Trim() ?? "";
+            string matKhau = MatKhau?.Trim() ?? "";
+
             string noiDung =
                 "<TaiKhoan>" +
-                    "<MaNhanVien>" + MaNhanVien + "</MaNhanVien>" +
-                    "<MatKhau>" + MatKhau + "</MatKhau>" +
+                    "<MaNhanVien>" + maNV + "</MaNhanVien>" +
+                    "<MatKhau>" + matKhau + "</MatKhau>" +
                     "<Quyen>" + Quyen + "</Quyen>" +
                 "</TaiKhoan>";
 
             Fxml.Them("TaiKhoan.xml", noiDung);
         }
 
-
-        // ================================
-        // XÓA TÀI KHOẢN
-        // ================================
+        // Xóa tài khoản
         public void xoaTK(string MaNhanVien)
         {
-            Fxml.Xoa("TaiKhoan.xml", "TaiKhoan", "MaNhanVien", MaNhanVien);
+            string maNV = MaNhanVien?.Trim() ?? "";
+            Fxml.Xoa("TaiKhoan.xml", "TaiKhoan", "MaNhanVien", maNV);
         }
 
-
-        // ================================
-        // KIỂM TRA TỒN TẠI TÀI KHOẢN
-        // ================================
-        public bool kiemtraTTTK(string MaNhanVien)
+        // Đổi mật khẩu
+        public void DoiMatKhau(string nguoiDung, string matKhauMoi)
         {
-            if (!System.IO.File.Exists(TaiKhoanPath))
-                return false;
+            if (!File.Exists(TaiKhoanPath)) return;
+
+            // QUAN TRỌNG: Trim trước khi lưu vào XML
+            string maNV = nguoiDung?.Trim() ?? "";
+            string matKhau = matKhauMoi?.Trim() ?? "";
 
             XmlDocument doc = new XmlDocument();
             doc.Load(TaiKhoanPath);
 
-            XmlNode node = doc.SelectSingleNode($"NewDataSet/TaiKhoan[MaNhanVien='{MaNhanVien}']");
-            return node != null;
+            // Tìm node với trim để đảm bảo tìm đúng
+            XmlNodeList nodes = doc.SelectNodes("NewDataSet/TaiKhoan");
+            foreach (XmlNode node in nodes)
+            {
+                string maNVNode = node["MaNhanVien"]?.InnerText?.Trim() ?? "";
+                if (maNVNode == maNV)
+                {
+                    node["MatKhau"].InnerText = matKhau;
+                    doc.Save(TaiKhoanPath);
+                    break;
+                }
+            }
         }
 
-
-        // ================================
-        // ĐỔI MẬT KHẨU
-        // ================================
-        public void DoiMatKhau(string nguoiDung, string matKhau)
+        // Kiểm tra tài khoản đã tồn tại chưa
+        public bool kiemtraTonTaiTK(string MaNhanVien)
         {
-            if (!System.IO.File.Exists(TaiKhoanPath))
+            if (!File.Exists(TaiKhoanPath)) return false;
+
+            string maNV = MaNhanVien?.Trim() ?? "";
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load(TaiKhoanPath);
+
+            XmlNodeList nodes = doc.SelectNodes("NewDataSet/TaiKhoan");
+            foreach (XmlNode node in nodes)
             {
-                MessageBox.Show("Không tìm thấy TaiKhoan.xml");
+                string maNVNode = node["MaNhanVien"]?.InnerText?.Trim() ?? "";
+                if (maNVNode == maNV)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // ==========================================================
+        // 4) QUÊN MẬT KHẨU: LẤY MẬT KHẨU KHI NGƯỜI DÙNG QUÊN
+        // ==========================================================
+        public string LayMatKhau(string MaNhanVien)
+        {
+            if (!File.Exists(TaiKhoanPath)) return "";
+
+            string maNV = MaNhanVien?.Trim() ?? "";
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load(TaiKhoanPath);
+
+            XmlNodeList nodes = doc.SelectNodes("NewDataSet/TaiKhoan");
+            foreach (XmlNode node in nodes)
+            {
+                string maNVNode = node["MaNhanVien"]?.InnerText?.Trim() ?? "";
+                if (maNVNode == maNV)
+                {
+                    return node["MatKhau"]?.InnerText?.Trim() ?? "";
+                }
+            }
+
+            return "";
+        }
+
+        // ==========================================================
+        // 5) ĐỔI MẬT KHẨU KHI NGƯỜI DÙNG QUÊN MẬT KHẨU
+        // ==========================================================
+        public void DoiMatKhauKhiQuen(string MaNhanVien, string MatKhauMoi)
+        {
+            string maNV = MaNhanVien?.Trim() ?? "";
+            string matKhau = MatKhauMoi?.Trim() ?? "";
+
+            // Kiểm tra xem tài khoản có tồn tại không
+            if (!kiemtraTonTaiTK(maNV))
+            {
+                MessageBox.Show("Tài khoản không tồn tại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            XmlDocument doc1 = new XmlDocument();
-            doc1.Load(TaiKhoanPath);
-
-            XmlNode node1 = doc1.SelectSingleNode($"NewDataSet/TaiKhoan[MaNhanVien='{nguoiDung}']");
-
-            if (node1 != null)
-            {
-                node1["MatKhau"].InnerText = matKhau;
-                doc1.Save(TaiKhoanPath);
-            }
-        }
-
-
-        // ======================================================
-        // KIỂM TRA THÔNG TIN ĐĂNG NHẬP (MaNV + MatKhau)
-        // ======================================================
-        public bool kiemtraTTDN(string fileXML, string MaNhanVien, string MatKhau)
-        {
-            DataTable dt = Fxml.HienThi(fileXML);
-
-            // ⚠ KIỂM TRA TRƯỚC KHI LỌC
-            if (dt == null || dt.Columns.Count == 0)
-            {
-                MessageBox.Show("File " + fileXML + " rỗng hoặc sai cấu trúc!");
-                return false;
-            }
-
-            // ⚠ Tên cột phải đúng như XML
-            if (!dt.Columns.Contains("MaNhanVien") || !dt.Columns.Contains("MatKhau"))
-            {
-                MessageBox.Show("Cấu trúc XML không có cột MaNhanVien hoặc MatKhau!");
-                return false;
-            }
-
-            // Lọc đúng cách
-            dt.DefaultView.RowFilter =
-                $"MaNhanVien = '{MaNhanVien}' AND MatKhau = '{MatKhau}'";
-
-            return dt.DefaultView.Count > 0;
+            // Đổi mật khẩu mới
+            DoiMatKhau(maNV, matKhau);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace QuanLyCuaHangThuCung.Class
         }
 
         // ===================================================
-        // 1) GHI CHẤM CÔNG
+        // 1) GHI CHẤM CÔNG (Đã loại bỏ GioChamCong để khớp SQL)
         // ===================================================
         public void XacNhanDiLam(string MaNhanVien, int Ngay, int Thang, int Nam)
         {
@@ -33,16 +33,28 @@ namespace QuanLyCuaHangThuCung.Class
 
             XmlElement chamCong = doc.CreateElement("ChamCong");
 
-            chamCong.AppendChild(doc.CreateElement("MaNhanVien")).InnerText = MaNhanVien;
-            chamCong.AppendChild(doc.CreateElement("Ngay")).InnerText = Ngay.ToString();
-            chamCong.AppendChild(doc.CreateElement("Thang")).InnerText = Thang.ToString();
-            chamCong.AppendChild(doc.CreateElement("Nam")).InnerText = Nam.ToString();
-            chamCong.AppendChild(doc.CreateElement("GioChamCong")).InnerText = DateTime.Now.ToString("HH:mm");
+            // Chỉ thêm các trường có trong bảng SQL
+            XmlElement maNV = doc.CreateElement("MaNhanVien");
+            maNV.InnerText = MaNhanVien;
+            chamCong.AppendChild(maNV);
+
+            XmlElement ngayNode = doc.CreateElement("Ngay");
+            ngayNode.InnerText = Ngay.ToString();
+            chamCong.AppendChild(ngayNode);
+
+            XmlElement thangNode = doc.CreateElement("Thang");
+            thangNode.InnerText = Thang.ToString();
+            chamCong.AppendChild(thangNode);
+
+            XmlElement namNode = doc.CreateElement("Nam");
+            namNode.InnerText = Nam.ToString();
+            chamCong.AppendChild(namNode);
+
+            // Ghi chú: Đã loại bỏ GioChamCong vì bảng SQL không định nghĩa cột này
 
             root.AppendChild(chamCong);
             doc.Save(path);
         }
-
 
         // ===================================================
         // 2) KIỂM TRA ĐÃ CHẤM CÔNG NGÀY ĐÓ CHƯA
@@ -51,8 +63,9 @@ namespace QuanLyCuaHangThuCung.Class
         {
             DataTable dt = Fxml.HienThi("ChamCong.xml");
 
+            // RowFilter vẫn giữ nguyên vì các cột này khớp với SQL
             dt.DefaultView.RowFilter =
-                $"MaNhanVien='{MaNhanVien}' AND Ngay='{Ngay}' AND Thang='{Thang}' AND Nam='{Nam}'";
+                $"MaNhanVien='{MaNhanVien}' AND Ngay={Ngay} AND Thang={Thang} AND Nam={Nam}";
 
             return dt.DefaultView.Count > 0;
         }

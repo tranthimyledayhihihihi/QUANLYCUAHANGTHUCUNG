@@ -1,5 +1,4 @@
-﻿// File: frmDoiMatKhau.cs
-using System;
+﻿using System;
 using System.Windows.Forms;
 using QuanLyCuaHangThuCung.Class; // Cần để gọi lớp DoiMatKhau và GlobalVariables
 
@@ -49,27 +48,33 @@ namespace QuanLyCuaHangThuCung.GUI
                 dmkh.Doi(matKhauMoi);
 
                 MessageBox.Show("Đổi mật khẩu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
+                this.Close();  // Đóng form khi đổi mật khẩu thành công
             }
             catch (Exception ex)
             {
+                // 5. Nếu có lỗi, thông báo cho người dùng
                 MessageBox.Show("Lỗi khi cập nhật mật khẩu: " + ex.Message, "Lỗi Hệ Thống", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnHuy_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.Close();  // Đóng form nếu người dùng nhấn hủy
         }
 
         private void pnlContent_Paint(object sender, PaintEventArgs e)
         {
-
+            // Code vẽ trên panel nếu cần
         }
 
         private void lblMKCu_Click(object sender, EventArgs e)
         {
+            // Xử lý sự kiện nếu cần khi click vào label mật khẩu cũ
+        }
 
+        private void frmDoiMatKhau_Load(object sender, EventArgs e)
+        {
+            // Code khởi tạo khi form được load (nếu cần)
         }
     }
 }
