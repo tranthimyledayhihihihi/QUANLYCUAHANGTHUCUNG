@@ -191,10 +191,5 @@ namespace QuanLyCuaHangThuCung.GUI
                 txtMaSP.ReadOnly = true;
             }
         }
-
-        private void cboMaNCC_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }

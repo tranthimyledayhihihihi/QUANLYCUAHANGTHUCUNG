@@ -15,7 +15,7 @@ namespace QuanLyCuaHangThuCung.GUI
         {
             InitializeComponent();
 
-            xmlFilePath = Application.StartupPath + "\\ThuCung.xml";
+            xmlFilePath = Application.StartupPath + "\\Data\\ThuCung.xml";
             dsThuCung = new DataSet();
 
             ApplyColorTheme();
@@ -123,7 +123,6 @@ namespace QuanLyCuaHangThuCung.GUI
         private void LoadNhaCungCap()
         {
             cboNCC.Items.Clear();
-
             string nccFile = Application.StartupPath + "\\NhaCungCap.xml";
 
             if (!File.Exists(nccFile))
@@ -282,6 +281,11 @@ namespace QuanLyCuaHangThuCung.GUI
             dtpNgaySinh.Value = DateTime.Now;
 
             txtMaTC.Focus();
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

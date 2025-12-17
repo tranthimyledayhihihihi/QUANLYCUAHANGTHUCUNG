@@ -44,9 +44,8 @@
             this.pnlHeader.Controls.Add(this.lblTitle);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlHeader.Location = new System.Drawing.Point(0, 0);
-            this.pnlHeader.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlHeader.Name = "pnlHeader";
-            this.pnlHeader.Size = new System.Drawing.Size(541, 68);
+            this.pnlHeader.Size = new System.Drawing.Size(678, 85);
             this.pnlHeader.TabIndex = 1;
             this.pnlHeader.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlHeader_Paint);
             // 
@@ -54,9 +53,9 @@
             // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.Location = new System.Drawing.Point(175, 20);
+            this.lblTitle.Location = new System.Drawing.Point(130, 22);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(181, 37);
+            this.lblTitle.Size = new System.Drawing.Size(217, 45);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "ĐĂNG NHẬP";
             // 
@@ -70,11 +69,10 @@
             this.pnlBody.Controls.Add(this.btnDangNhap);
             this.pnlBody.Controls.Add(this.btnThoat);
             this.pnlBody.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlBody.Location = new System.Drawing.Point(0, 68);
-            this.pnlBody.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.pnlBody.Location = new System.Drawing.Point(0, 85);
             this.pnlBody.Name = "pnlBody";
-            this.pnlBody.Padding = new System.Windows.Forms.Padding(18, 16, 18, 16);
-            this.pnlBody.Size = new System.Drawing.Size(541, 253);
+            this.pnlBody.Padding = new System.Windows.Forms.Padding(20);
+            this.pnlBody.Size = new System.Drawing.Size(678, 289);
             this.pnlBody.TabIndex = 0;
             this.pnlBody.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlBody_Paint);
             // 
@@ -82,49 +80,47 @@
             // 
             this.lblUser.AutoSize = true;
             this.lblUser.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.lblUser.Location = new System.Drawing.Point(104, 46);
+            this.lblUser.Location = new System.Drawing.Point(121, 30);
             this.lblUser.Name = "lblUser";
-            this.lblUser.Size = new System.Drawing.Size(131, 25);
+            this.lblUser.Size = new System.Drawing.Size(148, 30);
             this.lblUser.TabIndex = 0;
             this.lblUser.Text = "Mã nhân viên:";
             // 
             // txtUser
             // 
             this.txtUser.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.txtUser.Location = new System.Drawing.Point(240, 46);
-            this.txtUser.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtUser.Location = new System.Drawing.Point(318, 30);
             this.txtUser.Name = "txtUser";
-            this.txtUser.Size = new System.Drawing.Size(178, 32);
+            this.txtUser.Size = new System.Drawing.Size(200, 37);
             this.txtUser.TabIndex = 1;
             // 
             // lblPass
             // 
             this.lblPass.AutoSize = true;
             this.lblPass.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.lblPass.Location = new System.Drawing.Point(104, 94);
+            this.lblPass.Location = new System.Drawing.Point(121, 90);
             this.lblPass.Name = "lblPass";
-            this.lblPass.Size = new System.Drawing.Size(95, 25);
+            this.lblPass.Size = new System.Drawing.Size(108, 30);
             this.lblPass.TabIndex = 2;
             this.lblPass.Text = "Mật khẩu:";
+            this.lblPass.Click += new System.EventHandler(this.lblPass_Click);
             // 
             // txtPass
             // 
             this.txtPass.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.txtPass.Location = new System.Drawing.Point(240, 92);
-            this.txtPass.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtPass.Location = new System.Drawing.Point(318, 90);
             this.txtPass.Name = "txtPass";
             this.txtPass.PasswordChar = '●';
-            this.txtPass.Size = new System.Drawing.Size(178, 32);
+            this.txtPass.Size = new System.Drawing.Size(200, 37);
             this.txtPass.TabIndex = 3;
             // 
             // btnDangNhap
             // 
             this.btnDangNhap.BackColor = System.Drawing.Color.White;
             this.btnDangNhap.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.btnDangNhap.Location = new System.Drawing.Point(109, 150);
-            this.btnDangNhap.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnDangNhap.Location = new System.Drawing.Point(111, 160);
             this.btnDangNhap.Name = "btnDangNhap";
-            this.btnDangNhap.Size = new System.Drawing.Size(143, 32);
+            this.btnDangNhap.Size = new System.Drawing.Size(198, 40);
             this.btnDangNhap.TabIndex = 4;
             this.btnDangNhap.Text = "Đăng nhập";
             this.btnDangNhap.UseVisualStyleBackColor = false;
@@ -134,10 +130,9 @@
             // 
             this.btnThoat.BackColor = System.Drawing.Color.White;
             this.btnThoat.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.btnThoat.Location = new System.Drawing.Point(302, 150);
-            this.btnThoat.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnThoat.Location = new System.Drawing.Point(434, 160);
             this.btnThoat.Name = "btnThoat";
-            this.btnThoat.Size = new System.Drawing.Size(116, 32);
+            this.btnThoat.Size = new System.Drawing.Size(130, 40);
             this.btnThoat.TabIndex = 5;
             this.btnThoat.Text = "Thoát";
             this.btnThoat.UseVisualStyleBackColor = false;
@@ -145,14 +140,13 @@
             // 
             // frmDangNhap
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(541, 321);
+            this.ClientSize = new System.Drawing.Size(678, 374);
             this.Controls.Add(this.pnlBody);
             this.Controls.Add(this.pnlHeader);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
             this.Name = "frmDangNhap";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

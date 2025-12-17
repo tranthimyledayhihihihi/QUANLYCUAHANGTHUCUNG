@@ -17,11 +17,6 @@ namespace QuanLyCuaHangThuCung.Class
             return !string.IsNullOrEmpty(value);
         }
 
-        public DataTable LoadMaThuCung()
-        {
-            return Fxml.HienThi("ThuCung.xml");
-        }
-
         // ==========================================================
         // 2. THÊM THÚ CƯNG
         // ==========================================================
